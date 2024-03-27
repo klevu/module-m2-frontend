@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\Frontend\ViewModel\VisibilityFilter;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * @var Template $block
+ * @var VisibilityFilter $visibilityFilterViewModel
+ */
+$visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
+?>
+<?php if ($visibilityFilterViewModel->isEnabled()): ?>
+    <script>
+
+        let klevuVisibilityFilter = {
+            queriesToFilter: [
+                'noResultsFoundPopularProductList',
+                'productList',
+                'productListFallback',
+                'klevuRECSItemList'
+            ],
+            filterType: "ANY_OF",
+            recordQueryPath: "request.current.recordQueries",
+
+            /**
+             * @param {{id: string, type: string}} request
+             * @returns {{valueOperator: string, values: string[], key: string, singleSelect: boolean}}
+             */
+            generateFilterCondition: function (request) {
+                return {
+                    key: "visibility",
+                    valueOperator: "INCLUDE",
+                    singleSelect: false,
+                    values: [
+                        "catalog-search",
+                        klevuVisibilityFilter.getVisibilityForRequest(request)
+                    ],
+                };
+            },
+
+            /**
+             * @param {{id: string, type: string}} request
+             * @returns {string}
+             */
+            getVisibilityForRequest: function (request) {
+                return request.type === 'SEARCH' ? 'search' : 'catalog';
+            },
+
+            /**
+             * @param {{}} data
+             * @returns {*[{id: string, type: string}]}
+             */
+            getRequestsToFilter: function (data) {
+                let requestData = [];
+                let currentRecordQueries = klevu.getObjectPath(
+                    data,
+                    klevuVisibilityFilter.recordQueryPath,
+                    []
+                );
+                klevu.each(currentRecordQueries, function (index, query) {
+                    if (-1 === klevu.inArray(query.id, klevuVisibilityFilter.queriesToFilter)) {
+                        return;
+                    }
+                    requestData.push({
+                        id: query.id,
+                        type: query.typeOfRequest
+                    });
+                });
+
+                return requestData;
+            },
+
+            /**
+             * @param {{}} data
+             * @param {{id: string, type: string}} request
+             * @returns {*}
+             */
+            getLocalOverrideGroupCondition: function (data, request) {
+                let productListGroupCondition = klevu.getObjectPath(
+                    data,
+                    klevuVisibilityFilter.getConditionGroupPath(request),
+                    {}
+                );
+                productListGroupCondition.groupOperator = productListGroupCondition.groupOperator || klevuVisibilityFilter.filterType;
+                productListGroupCondition.conditions = productListGroupCondition.conditions || [];
+
+                return productListGroupCondition;
+            },
+
+            /**
+             * @param {{id: string, type: string}} request
+             * @returns {string}
+             */
+            getConditionGroupPath: function (request) {
+                return "localOverrides.query." + request.id + ".settings.groupCondition";
+            }
+        };
+
+        klevu.event.webhook.attach({
+            object: "search",
+            scope: "all",
+            name: "chains.request.build",
+            action: "after",
+            fire: function (data, scope) {
+                klevu.each(klevuVisibilityFilter.getRequestsToFilter(data), function (index, request) {
+                    let localOverrideGroupCondition = klevuVisibilityFilter.getLocalOverrideGroupCondition(data, request);
+                    klevu.each(localOverrideGroupCondition.conditions, function (index, condition) {
+                        if (condition.key === 'visibility') {
+                            // remove visibility from conditions if already set
+                            localOverrideGroupCondition.conditions.splice(index, 1);
+                        }
+                    });
+                    localOverrideGroupCondition.conditions.push(
+                        klevuVisibilityFilter.generateFilterCondition(request)
+                    );
+
+                    klevu.setObjectPath(
+                        data,
+                        klevuVisibilityFilter.getConditionGroupPath(request),
+                        localOverrideGroupCondition
+                    );
+                });
+            }
+        });
+    </script>
+<?php endif; ?>

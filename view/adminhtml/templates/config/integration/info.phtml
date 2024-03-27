@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\Configuration\Block\Adminhtml\Backend\Template;
+use Klevu\Frontend\ViewModel\Escaper as EscaperViewModel;
+
+/**
+ * @var Template $block
+ * @var EscaperViewModel $escaperViewModel
+ */
+$escaperViewModel = $block->getData('escaper_view_model');
+$escaper = $escaperViewModel->getEscaper();
+?>
+<section class="admin__page-section">
+    <div class="admin__page-section-content" style="display: flex; gap: 20px; margin-left: -10px; margin-right: -10px;">
+        <section style="flex-basis: 50%;">
+            <h2><?= $escaper->escapeHtml(__('Configuration')) ?></h2>
+            <p>
+                <?= $escaper->escapeHtml(
+                    data: __(
+                        'You can find settings to update frontend configuration, under %1Klevu%2 &gt; %1Frontend%2',
+                        '<strong>',
+                        '</strong>',
+                    ),
+                    allowedTags: ['strong'],
+                ) ?>
+            </p>
+
+            <p>
+                <?= $escaper->escapeHtml(
+                    data: __(
+                        'Advanced configuration options can be found under %1Klevu%2 &gt; %1Developer Settings%2 '
+                        . '&gt; %1Frontend%2',
+                        '<strong>',
+                        '</strong>',
+                    ),
+                    allowedTags: ['strong'],
+                ) ?>
+            </p>
+        </section>
+
+        <section style="flex-basis: 50%;">
+            <h2><?= $escaper->escapeHtml(__('Useful Links')) ?></h2>
+            <p>
+                <?= $escaper->escapeHtml(
+                    data: __(
+                        'Our %1Knowledgebase%2 contains in-depth guides and articles on integrating Klevu with '
+                        . 'Magento. Some pertinent ones can be found below:',
+                        '<a href="https://help.klevu.com/support/solutions/5000174077" target="_blank">',
+                        '</a>',
+                    ),
+                    allowedTags: ['a'],
+                ) ?>
+            </p>
+            <ul style="margin-left: 20px;">
+                <li>
+                    <a href=""
+                       target="_blank"><?= $escaper->escapeHtml(__('Changing the search parameter')) ?></a>
+                </li>
+                <li>
+                    <a href=""
+                       target="_blank"><?= $escaper->escapeHtml(__('Change the search results URL')) ?></a>
+                </li>
+                <li>
+                    <a href=""
+                       target="_blank"
+                    ><?= $escaper->escapeHtml(__('Debugging and troubleshooting common issues')) ?></a>
+                </li>
+            </ul>
+            <p>
+                <?= $escaper->escapeHtml(
+                    data: __(
+                        'You can also refer to our %1developer documentation%2 if you need to customise the '
+                        . 'frontend behaviour.',
+                        '<a href="" target="_blank">',
+                        '</a>',
+                    ),
+                    allowedTags: ['a'],
+                ) ?>
+            </p>
+        </section>
+    </div>
+</section>

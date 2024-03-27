@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+
+    <group id="frontend"
+           translate="label"
+           sortOrder="10"
+           showInDefault="1"
+           showInWebsite="1"
+           showInStore="1">
+        <label>Frontend</label>
+        <attribute type="expanded">1</attribute>
+        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+
+        <field id="klevu_settings"
+               translate="label"
+               sortOrder="999"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1">
+            <label>Custom JSv2 Settings</label>
+            <config_path>klevu_frontend/general/klevu_settings</config_path>
+            <frontend_model>Klevu\Frontend\Block\Adminhtml\Form\Field\CustomSettings</frontend_model>
+            <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+            <comment>
+                <![CDATA[
+                See Klevu documentation for paths and corresponding types.<br/>
+                If the type for a path is not correct it may cause issues on the frontend.<br/>
+                Any data entered here will override data from other fields.
+                ]]>
+            </comment>
+        </field>
+    </group>
+
+    <group id="logger">
+        <field id="log_level_frontend"
+               translate="label comment"
+               sortOrder="20"
+               type="select"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1">
+            <config_path>klevu_frontend/developer/log_level_frontend</config_path>
+            <label>Frontend Log Level</label>
+            <source_model>Klevu\Logger\Source\LogLevel\Monolog</source_model>
+            <comment>
+                <![CDATA[Log Level for the frontend log.]]>
+            </comment>
+        </field>
+    </group>
+</config>

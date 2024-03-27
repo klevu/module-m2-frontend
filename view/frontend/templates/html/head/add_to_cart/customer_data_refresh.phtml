@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\FrontendApi\ViewModel\Html\Head\AddToCartInterface;
+use Magento\Framework\View\Element\Template;
+
+// phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable
+
+/**
+ * @var Template $block
+ * @var AddToCartInterface $addToCartViewModel
+ */
+
+$addToCartViewModel = $block->getAddToCartViewModel();
+?>
+
+<?php if ($addToCartViewModel->isEnabled()): ?>
+    <script>
+        if (undefined !== typeof klevuAddToCart) {
+            document.addEventListener(klevuAddToCart.event.addToCartSuccess, (event) => {
+                event.preventDefault();
+
+                require([
+                    'Magento_Customer/js/customer-data'
+                ], function (customerData) {
+                    const sections = ['cart'];
+                    customerData.invalidate(sections);
+                    customerData.reload(sections, true);
+
+                    if ("undefined" !== typeof event.detail) {
+                        klevuAddToCart.dispatchEventAfterCustomerRefresh(event.detail);
+                    }
+                });
+            });
+        }
+    </script>
+<?php endif; ?>

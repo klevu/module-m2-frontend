@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="Klevu\Configuration\ViewModel\Config\Information\KnowledgeBase"
+                 type="Klevu\Configuration\ViewModel\Config\Information\ArticleList">
+        <arguments>
+            <argument name="articles" xsi:type="array">
+                <item name="frontend" xsi:type="array">
+                    <item name="custom_jsv2_settings" xsi:type="array">
+                        <item name="link" xsi:type="string"><![CDATA[https://help.klevu.com/replace-me/custom-jsv2-setting-in-magento-admin]]></item>
+                        <item name="order" xsi:type="number">20</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Frontend\Block\Adminhtml\Config\Integration\Info"
+                 type="Klevu\Configuration\Block\Adminhtml\Backend\Template">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="name" xsi:type="string">klevu_frontend_integration_info_block</item>
+                <item name="template" xsi:type="string">Klevu_Frontend::config/integration/info.phtml</item>
+                <item name="escaper_view_model" xsi:type="object">Klevu\Frontend\ViewModel\Escaper</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

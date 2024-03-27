@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\Frontend\ViewModel\CurrencyConversion;
+use Klevu\Frontend\ViewModel\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * @var Template $block
+ * @var CurrencyConversion $currencyConversionViewModel
+ * @var Escaper $escaperViewModel
+ */
+$currencyConversionViewModel = $block->getCurrencyConversionViewModel();
+$escaperViewModel = $block->getEscaperViewModel();
+$escaper = $escaperViewModel->getEscaper();
+?>
+<?php if ($currencyConversionViewModel->isEnabled()): ?>
+    <script>
+        let klevuCurrency = {
+            exchangeRate: <?= $escaper->escapeJs($currencyConversionViewModel->getExchangeRate()) ?>,
+            symbol: "<?= $escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol()) ?>",
+            originalData: {
+                start: null,
+                end: null,
+            },
+
+            toLocal: function toLocal(value) {
+                if (!klevuCurrency.exchangeRate || klevuCurrency.exchangeRate === 1) {
+                    return value;
+                }
+                if (value) {
+                    value = Math.round(value * klevuCurrency.exchangeRate * 100) / 100
+                }
+                return Math.round(value);
+            },
+
+            toBase: function toBase(value) {
+                if (!klevuCurrency.exchangeRate || klevuCurrency.exchangeRate === 1) {
+                    return value;
+                }
+                if (value) {
+                    value = Math.round(value / klevuCurrency.exchangeRate * 100) / 100
+                }
+                return Math.round(value);
+            },
+
+            convertProductPrice: function (productRecords) {
+                klevu.each(productRecords, function (index, product) {
+                    // recommendations requires this symbol replacement
+                    product.currency = klevuCurrency.symbol;
+                    if (klevu.isNumeric(product.price)) {
+                        product.price = klevuCurrency.toLocal(product.price);
+                    }
+                    if (klevu.isNumeric(product.salePrice)) {
+                        product.salePrice = klevuCurrency.toLocal(product.salePrice);
+                    }
+                    if (klevu.isNumeric(product.startPrice)) {
+                        product.startPrice = klevuCurrency.toLocal(product.startPrice);
+                    }
+                    if (klevu.isNumeric(product.toPrice)) {
+                        product.toPrice = klevuCurrency.toLocal(product.toPrice);
+                    }
+                });
+            },
+
+            convertFilterDisplayPrice: function (filters) {
+                klevu.each(filters, function (index, filter) {
+                    if (filter.key !== 'klevu_price') {
+                        return;
+                    }
+                    if (klevu.isNumeric(filter.start)) {
+                        klevuCurrency.originalData.start = filter.start;
+                        filter.start = klevuCurrency.toLocal(filter.start).toString();
+                    }
+                    if (klevu.isNumeric(filter.end)) {
+                        klevuCurrency.originalData.end = filter.end;
+                        filter.end = klevuCurrency.toLocal(filter.end).toString();
+                    }
+                    if (!klevu.isUndefined(filter.min) && klevu.isNumeric(filter.min)) {
+                        filter.min = klevuCurrency.toLocal(filter.min).toString();
+                    }
+                    if (!klevu.isUndefined(filter.max) && klevu.isNumeric(filter.max)) {
+                        filter.max = klevuCurrency.toLocal(filter.max).toString();
+                    }
+                });
+            },
+
+            revertFilterRequestPrice: function (filters) {
+                // revert filter to base currency before sending request to Klevu
+                klevu.each(filters, function (index, filter) {
+                    if (filter.key !== 'klevu_price') {
+                        return;
+                    }
+                    // check to ensure currency conversion is not applied again when using pagination
+                    if (filter.values[0] !== klevuCurrency.originalData.start) {
+                        filter.values[0] = klevuCurrency.toBase(filter.values[0]).toString();
+                    }
+                    // check to ensure currency conversion is not applied again when using pagination
+                    if (filter.values[1] !== klevuCurrency.originalData.end) {
+                        filter.values[1] = klevuCurrency.toBase(filter.values[1]).toString();
+                    }
+                });
+            }
+        };
+
+        klevu.event.webhook.attach({
+            object: "search",
+            scope: "all",
+            name: "chains.template.process.success",
+            action: "before",
+            fire: function (data, scope) {
+                let templateQueries = klevu.getObjectPath(data, "template.query", false);
+                if (templateQueries) {
+                    // loop through each type "templateQuery" as they are different for recs and search results
+                    klevu.each(templateQueries, function (queryKey, templateQuery) {
+                        let productRecords = templateQuery.result;
+                        if (productRecords) {
+                            klevuCurrency.convertProductPrice(productRecords);
+                        }
+                        let filters = templateQuery.filters;
+                        if (filters) {
+                            klevuCurrency.convertFilterDisplayPrice(filters)
+                        }
+                    });
+                }
+            }
+        });
+
+        klevu.event.webhook.attach({
+            object: "search",
+            scope: "all",
+            name: "chains.request.build",
+            action: "after",
+            fire: function (data, scope) {
+                let localOverrides = klevu.getObjectPath(data, "localOverrides.query", false);
+                if (localOverrides) {
+                    // loop through each type "localOverrides" as they are different for recs and search results
+                    klevu.each(localOverrides, function (queryKey, localOverride) {
+                        if (!localOverride.filters) {
+                            return;
+                        }
+                        let filters = localOverride.filters.applyFilters.filters;
+                        if (filters) {
+                            klevuCurrency.revertFilterRequestPrice(filters)
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+<?php endif ?>

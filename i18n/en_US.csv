@@ -1,0 +1,26 @@
+"Frontend","Frontend"
+"General","General"
+"Display prices after Customer Group Load","Display prices after Customer Group Load"
+"Recommended if using Customer Group Pricing. This will delay the rendering of prices on the page until the current customer’s group is available, which will ensure the customer group price is displayed rather than the default.","Recommended if using Customer Group Pricing. This will delay the rendering of prices on the page until the current customer’s group is available, which will ensure the customer group price is displayed rather than the default."
+"Frontend Log Level","Frontend Log Level"
+"Log Level for the frontend log.","Log Level for the frontend log."
+"Path","Path"
+"Type","Type"
+"Value","Value"
+"Add","Add"
+"Boolean","Boolean"
+"Integer","Integer"
+"String","String"
+"PowerUp User Session","PowerUp User Session"
+"WARNING: Disabling this without triggering it in your code will cause Klevu to stop working. Only change if you are certain you have the required customisation in place. JSv2 setting <code>powerUp.userSession</code>.","WARNING: Disabling this without triggering it in your code will cause Klevu to stop working. Only change if you are certain you have the required customisation in place. JSv2 setting <code>powerUp.userSession</code>."
+"Custom JSv2 Settings","Custom JSv2 Settings"
+"See Klevu documentation for paths and corresponding types.<br>  If the type for a path is not correct it may cause issues on the frontend.<br> Any data entered here will override data from other fields.","See Klevu documentation for paths and corresponding types.<br>  If the type for a path is not correct it may cause issues on the frontend.<br> Any data entered here will override data from other fields."
+Configuration,Configuration
+"You can find settings to update frontend configuration, under %1Klevu%2 &gt; %1Frontend%2","You can find settings to update frontend configuration, under %1Klevu%2 &gt; %1Frontend%2"
+Advanced configuration options can be found under %1Klevu%2 &gt; %1Developer Settings%2 &gt; %1Frontend%2,Advanced configuration options can be found under %1Klevu%2 &gt; %1Developer Settings%2 &gt; %1Frontend%2
+Useful Links,Useful Links
+Our %1Knowledgebase%2 contains in-depth guides and articles on integrating Klevu with Magento. Some pertinent ones can be found below:,Our %1Knowledgebase%2 contains in-depth guides and articles on integrating Klevu with Magento. Some pertinent ones can be found below:
+Changing the search parameter,Changing the search parameter
+Change the search results URL,Change the search results URL
+Debugging and troubleshooting common issues,Debugging and troubleshooting common issues
+You can also refer to our %1developer documentation%2 if you need to customise the frontend behaviour.,You can also refer to our %1developer documentation%2 if you need to customise the frontend behaviour.

@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\Frontend\ViewModel\CurrencyConversion;
+use Klevu\Frontend\ViewModel\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * @var Template $block
+ * @var CurrencyConversion $currencyConversionViewModel
+ * @var Escaper $escaperViewModel
+ */
+$currencyConversionViewModel = $block->getCurrencyConversionViewModel();
+$escaperViewModel = $block->getEscaperViewModel();
+$escaper = $escaperViewModel->getEscaper();
+?>
+<?php if ($currencyConversionViewModel->isEnabled()): ?>
+    <script>
+        if (typeof klevu_uc_userOptions === "undefined") {
+            var klevu_uc_userOptions = {};
+        }
+        klevu_uc_userOptions.priceFormatter = {
+            appendCurrencyAtLast: false,
+            currencySymbol: "<?= $escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol()) ?>",
+            decimalPlaces: 2,
+            decimalSeparator: ".",
+            thousandSeparator: ",",
+            format: "%s%s",
+            grouping: 3,
+        };
+    </script>
+<?php endif; ?>

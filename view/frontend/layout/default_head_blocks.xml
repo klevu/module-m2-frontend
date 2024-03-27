@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block name="Klevu_Frontend.webhook"
+                   template="Klevu_Frontend::html/head/webhook.phtml"
+                   before="-">
+            </block>
+
+            <block name="Klevu_Frontend.js_includes.core"
+                   template="Klevu_Frontend::html/head/js_includes.phtml"
+                   before="-"
+                   after="Klevu_Frontend.webhook">
+                <arguments>
+                    <argument name="js_includes_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\JsIncludesCore</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+            </block>
+
+            <block name="Klevu_Frontend.js_settings"
+                   template="Klevu_Frontend::html/head/js_settings.phtml"
+                   before="-"
+                   after="Klevu_Frontend.js_includes.core">
+                <arguments>
+                    <argument name="js_settings_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\JsSettings</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+                <container name="klevu_frontend.init_before"/>
+                <container name="klevu_frontend.init_after"/>
+            </block>
+
+            <block name="Klevu_Frontend.js_includes"
+                   template="Klevu_Frontend::html/head/js_includes.phtml"
+                   before="-"
+                   after="Klevu_Frontend.js_settings">
+                <arguments>
+                    <argument name="js_includes_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\JsIncludes</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+            </block>
+
+            <container name="Klevu_Frontend.session_data" after="-">
+                <block name="Klevu_Frontend.init_session_data"
+                       template="Klevu_Frontend::html/head/customer_data.phtml">
+                    <arguments>
+                        <argument name="cookie_view_model"
+                                  xsi:type="object">Klevu\Frontend\ViewModel\Cookie</argument>
+                        <argument name="customer_data_view_model"
+                                  xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\CustomerData</argument>
+                        <argument name="session_storage_view_model"
+                                  xsi:type="object">Klevu\Frontend\ViewModel\SessionStorage</argument>
+                        <argument name="escaper_view_model"
+                                  xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                    </arguments>
+                </block>
+            </container>
+
+        </referenceBlock>
+    </body>
+</page>

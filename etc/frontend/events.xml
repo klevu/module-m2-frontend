@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <event name="layout_generate_blocks_after">
+        <observer name="Klevu_Frontend_framework_view_layout_rel_link_builder"
+                  instance="Klevu\Frontend\Observer\Framework\View\Layout\RelLinkBuilder"/>
+    </event>
+
+    <event name="customer_login">
+        <observer name="Klevu_Frontend_invalidateCustomerDataOnLoginAndLogout"
+                  instance="Klevu\Frontend\Observer\Customer\InvalidateCustomerDataObserver"/>
+    </event>
+
+    <event name="customer_logout">
+        <observer name="Klevu_Frontend_invalidateCustomerDataOnLoginAndLogout"
+                  instance="Klevu\Frontend\Observer\Customer\InvalidateCustomerDataObserver"/>
+    </event>
+
+</config>

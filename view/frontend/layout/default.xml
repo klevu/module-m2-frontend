@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="before.body.end">
+            <block name="Klevu_Frontend.currency_conversion"
+                   template="Klevu_Frontend::currency_conversion.phtml">
+                <arguments>
+                    <argument name="currency_conversion_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\CurrencyConversion</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+            </block>
+            <block name="Klevu_Frontend.price_formatter"
+                   template="Klevu_Frontend::price_formatter.phtml">
+                <arguments>
+                    <argument name="currency_conversion_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\CurrencyConversion</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+            </block>
+            <block name="Klevu_Frontend.visibility_filter"
+                   template="Klevu_Frontend::visibility_filter.phtml">
+                <arguments>
+                    <argument name="visibility_filter_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\VisibilityFilter</argument>
+                </arguments>
+            </block>
+
+            <block name="Klevu_Frontend.add_to_cart"
+                   template="Klevu_Frontend::html/head/add_to_cart.phtml">
+                <arguments>
+                    <argument name="add_to_cart_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\AddToCart</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+                <container name="klevu_frontend.addtocart_before"/>
+            </block>
+
+            <block name="Klevu_Frontend.add_to_cart.customer_data_refresh"
+                   after="Klevu_Frontend.add_to_cart"
+                   template="Klevu_Frontend::html/head/add_to_cart/customer_data_refresh.phtml">
+                <arguments>
+                    <argument name="add_to_cart_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\AddToCart</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+            </block>
+
+        </referenceBlock>
+    </body>
+</page>

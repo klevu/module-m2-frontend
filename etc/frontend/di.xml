@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Klevu\FrontendApi\Service\Provider\Currency\RatesProviderInterface"
+                type="Klevu\Frontend\Service\Provider\Currency\RatesProvider"/>
+
+    <preference for="Klevu\FrontendApi\Service\Provider\CurrencyProviderInterface"
+                type="Klevu\Frontend\Service\Provider\CurrencyProvider"/>
+
+    <type name="Klevu\Frontend\Service\KlevuSettingsBuilder">
+        <arguments>
+            <argument name="klevuSettings" xsi:type="array">
+                <item name="global" xsi:type="array">
+                    <item name="apiKey" xsi:type="object">Klevu\Frontend\Service\Provider\ApiKeyProvider</item>
+                    <item name="language" xsi:type="object">Klevu\Frontend\Service\Provider\LanguageProvider</item>
+                </item>
+            </argument>
+            <argument name="isEnabledConditions" xsi:type="array">
+                <item name="klevu_integrated"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Frontend\ViewModel\Html\Head\CustomerData">
+        <arguments>
+            <argument name="isEnabledConditions" xsi:type="array">
+                <item name="klevu_integrated"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Klevu\Frontend\Service\Provider\ApiKeyProvider"
+                 type="Klevu\Frontend\Service\Provider\SettingsProvider">
+        <arguments>
+            <argument name="configSettingPath"
+                      xsi:type="const">Klevu\Configuration\Service\Provider\ApiKeyProvider::CONFIG_XML_PATH_JS_API_KEY</argument>
+            <argument name="customSettingsPath" xsi:type="string">global.apiKey</argument>
+            <argument name="returnType"
+                      xsi:type="const">Klevu\Frontend\Model\Config\Source\KlevuCustomOptionsTypeSource::TYPE_VALUE_STRING</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Frontend\Service\Provider\LocaleCodeProvider"
+                 type="Klevu\Frontend\Service\Provider\SettingsProvider">
+        <arguments>
+            <argument name="configSettingPath"
+                      xsi:type="const">Magento\Config\Model\Config\Backend\Admin\Custom::XML_PATH_GENERAL_LOCALE_CODE</argument>
+            <argument name="returnType"
+                      xsi:type="const">Klevu\Frontend\Model\Config\Source\KlevuCustomOptionsTypeSource::TYPE_VALUE_STRING</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Klevu\Frontend\Service\Provider\LanguageProvider">
+        <arguments>
+            <argument name="localeCodeProvider"
+                      xsi:type="object">Klevu\Frontend\Service\Provider\LocaleCodeProvider</argument>
+            <argument name="logger" xsi:type="object">Klevu\Frontend\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Frontend\Service\Provider\Layout\RelLinkProvider">
+        <arguments>
+            <argument name="links" xsi:type="array">
+                <item name="preconnect_klevu_core" xsi:type="array">
+                    <item name="path" xsi:type="object">Klevu\Frontend\Service\Provider\Urls\JsUrlProvider</item>
+                    <item name="type" xsi:type="string">preconnect</item>
+                    <item name="is_enabled_conditions" xsi:type="array">
+                        <item name="klevu_integrated"
+                              xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Klevu\Frontend\ViewModel\Html\Head\JsIncludesCore"
+                 type="Klevu\Frontend\ViewModel\Html\Head\JsIncludes">
+        <arguments>
+            <argument name="jsIncludes" xsi:type="array">
+                <item name="core" xsi:type="array">
+                    <item name="before" xsi:type="string">-</item>
+                    <item name="provider"
+                          xsi:type="object">Klevu\Frontend\Service\Provider\Urls\JsUrlProvider</item>
+                    <item name="path" xsi:type="string"><![CDATA[core/v2/klevu.js]]></item>
+                    <item name="is_enabled_conditions" xsi:type="array">
+                        <item name="klevu_integrated"
+                              xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Klevu\Frontend\Service\Provider\Urls\AddToCartUrlProvider">
+        <arguments>
+            <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Frontend\ViewModel\Html\Head\AddToCart">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Frontend\Logger\Logger</argument>
+            <argument name="isEnabledConditions" xsi:type="array">
+                <item name="klevu_integrated"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Frontend\ViewModel\CurrencyConversion">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Frontend\Logger\Logger</argument>
+            <argument name="isEnabledConditions" xsi:type="array">
+                <item name="klevu_integrated"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Frontend\ViewModel\VisibilityFilter">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Frontend\Logger\Logger</argument>
+            <argument name="isEnabledConditions" xsi:type="array">
+                <item name="klevu_integrated"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

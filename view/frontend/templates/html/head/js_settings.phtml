@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\FrontendApi\ViewModel\Html\Head\JsSettingsInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @var Template $block
+ * @var JsSettingsInterface $viewModel
+ * @var SecureHtmlRenderer $secureRenderer
+ */
+$viewModel = $block->getJsSettingsViewModel();
+$klevuSettings = $viewModel->getKlevuJsSettings();
+?>
+<?php if (null !== $klevuSettings): ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag(
+        tagName: 'script',
+        attributes: ['type' => 'text/javascript'],
+        content: "\nlet klevuSettings = " . $klevuSettings . "\n",
+        textContent: false,
+    ) ?>
+
+    <?php if (!$viewModel->isSettingsGenerationError()): ?>
+        <?php
+        /**
+         * Inject javascript into klevu_frontend.init_before to make changes to klevuSettings before passing to klevu()
+         */
+        ?>
+        <?= $block->getChildHtml('klevu_frontend.init_before') ?>
+
+        <?= /* @noEscape */ $secureRenderer->renderTag(
+            tagName: 'script',
+            attributes: ['type' => 'text/javascript'],
+            content: "\nif(typeof klevuSettings !== 'undefined'){klevu(klevuSettings);}\n",
+            textContent: false,
+        ) ?>
+
+        <?php
+        /**
+         * Inject javascript into klevu_frontend.init_after to make changes after klevu()
+         */
+        ?>
+        <?= $block->getChildHtml('klevu_frontend.init_after') ?>
+    <?php endif; ?>
+<?php endif; ?>

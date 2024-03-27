@@ -1,0 +1,134 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\Frontend\ViewModel\Escaper as EscaperViewModel;
+use Klevu\FrontendApi\ViewModel\Html\Head\AddToCartInterface;
+use Magento\Framework\View\Element\Template;
+
+// phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable
+
+/**
+ * @var Template $block
+ * @var AddToCartInterface $addToCartViewModel
+ * @var EscaperViewModel $escaperViewModel
+ */
+
+$addToCartViewModel = $block->getAddToCartViewModel();
+$escaperViewModel = $block->getEscaperViewModel();
+$escaper = $escaperViewModel->getEscaper();
+?>
+
+<?php if ($addToCartViewModel->isEnabled()): ?>
+    <script>
+        var klevuAddToCart = klevuAddToCart || {};
+        klevuAddToCart.event = klevuAddToCart.event || {}
+        klevuAddToCart.event.addToCartSuccess = 'klevuAddToCartSuccess';
+        klevuAddToCart.event.refreshCustomerData = 'klevuAddToCartRefreshCustomerData';
+
+        /**
+         * @param {Object} formData
+         * @returns {Promise<void>}
+         */
+        klevuAddToCart.submitData = async function(formData) {
+            fetch("<?= $escaper->escapeUrl($addToCartViewModel->getAddToCartUrl()) ?>", {
+                method: "POST",
+                mode: "cors",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                    "Accept": "*/*",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: klevuAddToCart.generateParams(formData),
+            }).then((response) => {
+                if (response.ok) {
+                    klevuAddToCart.dispatchEventOnSuccess(response);
+                } else {
+                    console.error("Add To Cart:", response.status + ' ' + response.statusText);
+                }
+            }).catch((error) => {
+                console.error("Error:", error);
+            });
+        }
+
+        /**
+         * @param {Object} formData
+         * @returns {URLSearchParams}
+         */
+        klevuAddToCart.generateParams = function (formData) {
+            let params = new URLSearchParams();
+            for (const [key, value] of Object.entries(formData)) {
+                params.append(key, value);
+            }
+            params.append('form_key', "<?= $escaper->escapeHtmlAttr($addToCartViewModel->getFormKey()) ?>");
+
+            return params;
+        }
+
+        /**
+         * @param {Response} response
+         */
+        klevuAddToCart.dispatchEventOnSuccess = function (response) {
+            const event = new CustomEvent(klevuAddToCart.event.addToCartSuccess, {
+                detail: {
+                    redirected: response.redirected,
+                    url: response.url
+                },
+                bubbles: true,
+                cancelable: false,
+            });
+            document.dispatchEvent(event);
+        }
+
+        /**
+         * @param {Object} detail
+         */
+        klevuAddToCart.dispatchEventAfterCustomerRefresh = function (detail) {
+            const event = new CustomEvent(klevuAddToCart.event.refreshCustomerData, {
+                detail: detail,
+                bubbles: true,
+                cancelable: false,
+            });
+            document.dispatchEvent(event);
+        }
+
+        document.addEventListener(klevuAddToCart.event.refreshCustomerData, (event) => {
+            event.preventDefault();
+            if ("undefined" !== typeof event.detail.redirected
+                && event.detail.redirected
+                && "undefined" !== typeof event.detail.url
+            ) {
+                document.location = event.detail.url;
+            }
+        });
+    </script>
+
+    <?php
+    /**
+     * Replace "klevu_addtocart" by injecting your own version into "klevu_frontend.addtocart_before"
+     */
+    ?>
+    <?= $block->getChildHtml('klevu_frontend.addtocart_before') ?>
+
+    <script>
+        if ("undefined" === typeof klevu_addtocart) {
+            /**
+             * @param id
+             * @param url
+             * @param qty
+             */
+            function klevu_addtocart(id, url, qty) {
+                const formData = {
+                    product: id,
+                    qty: qty
+                };
+                klevuAddToCart.submitData(formData)
+            }
+        }
+    </script>
+<?php endif; ?>

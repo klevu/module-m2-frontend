@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="before.body.end">
+            <referenceBlock name="Klevu_Frontend.add_to_cart.customer_data_refresh" remove="true"/>
+
+            <block name="Klevu_Frontend.add_to_cart.hyva_customer_data_refresh"
+                   after="Klevu_Frontend.add_to_cart"
+                   template="Klevu_Frontend::html/head/add_to_cart/hyva_customer_data_refresh.phtml">
+                <arguments>
+                    <argument name="add_to_cart_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\AddToCart</argument>
+                    <argument name="escaper_view_model"
+                              xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
