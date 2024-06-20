@@ -4,19 +4,19 @@
     "require": {
         "php": "~8.1.0|~8.2.0",
         "psr/log": "*",
-        "klevu/module-m2-configuration": "0.2.0",
-        "klevu/module-m2-frontend-api": "0.2.0",
-        "klevu/module-m2-frontend-categorynavigation": "0.2.0",
-        "klevu/module-m2-customer": "0.2.0",
-        "klevu/module-m2-frontend-recommendations": "0.2.0",
-        "klevu/module-m2-frontend-search": "0.2.0",
-        "klevu/module-m2-frontend-metadata": "0.2.0",
+        "klevu/module-m2-configuration": "0.3.0",
+        "klevu/module-m2-frontend-api": "0.3.0",
+        "klevu/module-m2-frontend-categorynavigation": "0.3.0",
+        "klevu/module-m2-customer": "0.3.0",
+        "klevu/module-m2-frontend-recommendations": "0.3.0",
+        "klevu/module-m2-frontend-search": "0.3.0",
+        "klevu/module-m2-frontend-metadata": "0.3.0",
         "magento/module-config": "^101.2.4",
         "magento/framework": "^103.0.4",
         "magento/module-store": "^101.1.4"
     },
     "type": "magento2-module",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "license": [
         "MIT"
     ],
