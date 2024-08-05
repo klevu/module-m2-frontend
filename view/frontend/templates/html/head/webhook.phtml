@@ -20,6 +20,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 <?= /* @noEscape */ $secureRenderer->renderTag(
     tagName: 'script',
     attributes: ['type' => 'text/javascript'],
-    content: "\nwindow._klvWebhook = window._klvWebhook|| [];\n",
+    content: "\nwindow._klvWebhook = window._klvWebhook || [];\n",
     textContent: false,
 ) ?>

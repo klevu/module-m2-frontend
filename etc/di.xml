@@ -23,6 +23,9 @@
     <preference for="Klevu\FrontendApi\Service\Provider\Cookie\CookiePathProviderInterface"
                 type="Klevu\Frontend\Service\Provider\Cookie\CookiePathProvider"/>
 
+    <preference for="Klevu\FrontendApi\Service\Provider\CustomerGroupPricingEnabledProviderInterface"
+                type="Klevu\Frontend\Service\Provider\CustomerGroupPricingEnabledProvider"/>
+
     <preference for="Klevu\FrontendApi\Service\Provider\Customer\CookiePropertiesProviderInterface"
                 type="Klevu\Frontend\Service\Provider\Customer\CookiePropertiesProvider"/>
 
@@ -40,6 +43,9 @@
 
     <preference for="Klevu\FrontendApi\Service\CustomSettingsBuilderInterface"
                 type="Klevu\Frontend\Service\CustomSettingsBuilder"/>
+
+    <preference for="Klevu\FrontendApi\Service\DelayPowerUpDeterminerInterface"
+                type="Klevu\Frontend\Service\DelayPowerUpDeterminer"/>
 
     <preference for="Klevu\FrontendApi\Service\IsEnabledDeterminerInterface"
                 type="Klevu\Frontend\Service\IsEnabledDeterminer"/>
@@ -137,13 +143,13 @@
             <argument name="validator" xsi:type="object">Klevu\Frontend\Validator\RelLinkValidator</argument>
         </arguments>
     </type>
-    
+
     <type name="Klevu\Frontend\Validator\JsIncludesValidator">
         <arguments>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
     </type>
-    
+
     <type name="\Klevu\Frontend\Service\Provider\SettingsProvider">
         <arguments>
             <argument name="logger" xsi:type="object">Klevu\Frontend\Logger\Logger</argument>
@@ -191,4 +197,5 @@
             </argument>
         </arguments>
     </type>
+
 </config>

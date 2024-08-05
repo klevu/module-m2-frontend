@@ -133,4 +133,24 @@
         </arguments>
     </type>
 
+    <type name="Klevu\Frontend\ViewModel\CustomerGroupSuffix">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Frontend\Logger\Logger</argument>
+            <argument name="isEnabledConditions" xsi:type="array">
+                <item name="klevu_integrated"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+                <item name="klevu_customer_group_price_enabled"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsCustomerGroupPriceEnabledCondition</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Frontend\Service\Provider\PowerUpProvider">
+        <arguments>
+            <argument name="isEnabledConditions" xsi:type="array">
+                <item name="klevu_integrated"
+                      xsi:type="object">Klevu\Frontend\Service\IsEnabledCondition\IsStoreIntegratedCondition</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

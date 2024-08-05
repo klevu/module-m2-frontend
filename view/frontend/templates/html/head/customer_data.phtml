@@ -45,15 +45,17 @@ $sessionStorageKey = $sessionStorageViewModel->getSessionStorageKey();
 $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectionKey();
 ?>
 
-<script id="klevu_initsessiondata">
 
+<?php
+// phpcs:disable Generic.Files.LineLength.TooLong
+$scriptString = <<<script
     var klevuCustomerData = klevuCustomerData || {};
 
     /**
      * Create event for customer data load success
      * @type {CustomEvent}
      */
-    klevuCustomerData.LoadedEvent ??= new CustomEvent('<?= $escaper->escapeJs($customerDataLoadedEventName) ?>', {
+    klevuCustomerData.LoadedEvent ??= new CustomEvent('{$escaper->escapeJs($customerDataLoadedEventName)}', {
         bubbles: false,
         cancelable: true,
     });
@@ -62,7 +64,7 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
      * Create event for customer data load error
      * @type {CustomEvent}
      */
-    klevuCustomerData.ErrorEvent ??= new CustomEvent('<?= $escaper->escapeJs($customerDataErrorEventName) ?>', {
+    klevuCustomerData.ErrorEvent ??= new CustomEvent('{$escaper->escapeJs($customerDataErrorEventName)}', {
         bubbles: false,
         cancelable: true,
     });
@@ -70,7 +72,7 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
     /**
      * Listen to successful customer data load
      */
-    document.addEventListener('<?= $escaper->escapeJs($customerDataLoadedEventName) ?>', (e) => {
+    document.addEventListener('{$escaper->escapeJs($customerDataLoadedEventName)}', (e) => {
         klevuCustomerData.setCustomerDataExpirationInCookie();
     });
 
@@ -78,14 +80,13 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
      * @returns {void}
      */
     klevuCustomerData.setCustomerDataExpirationInCookie ??= function () {
-        let cookieData = klevuCustomerData.getCookie("<?= $escaper->escapeJs($cookieKey) ?>");
+        let cookieData = klevuCustomerData.getCookie("{$escaper->escapeJs($cookieKey)}");
         const customerDataExpiration = klevuCustomerData.nowUnixtime
-            + parseInt(<?= $escaper->escapeJs($customerDataLifetime) ?>);
-        <?php // phpcs:ignore Generic.Files.LineLength.TooLong ?>
-        cookieData.<?= $escaper->escapeJs($expireSectionsKey) ?>.<?= $escaper->escapeJs($cookieCustomerDataKey) ?> = customerDataExpiration;
+            + parseInt({$escaper->escapeJs($customerDataLifetime)});
+        cookieData.{$escaper->escapeJs($expireSectionsKey)}.{$escaper->escapeJs($cookieCustomerDataKey)} = customerDataExpiration;
 
         klevuCustomerData.setCookie(
-            "<?= $escaper->escapeJs($cookieKey) ?>",
+            "{$escaper->escapeJs($cookieKey)}",
             cookieData,
         );
     }
@@ -96,7 +97,7 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
      */
     klevuCustomerData.getCookie ??= function (name) {
         if (typeof (name) === "undefined") {
-            name = "<?= $escaper->escapeJs($cookieKey) ?>";
+            name = "{$escaper->escapeJs($cookieKey)}";
         }
         const cookies = document.cookie.split(';');
         const cookieStart = name + "=";
@@ -111,7 +112,7 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
         }
 
         return {
-            <?= $escaper->escapeJs($expireSectionsKey) ?>: {}
+            {$escaper->escapeJs($expireSectionsKey)}: {}
         }
     }
 
@@ -121,16 +122,16 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
      */
     klevuCustomerData.setCookie ??= function (name, data) {
         if (typeof (name) === "undefined") {
-            name = "<?= $escaper->escapeJs($cookieKey) ?>";
+            name = "{$escaper->escapeJs($cookieKey)}";
         }
         if (typeof (data) === "undefined") {
             data = {};
         }
-        const expirationTime = klevuCustomerData.nowUnixtime + parseInt(<?= $escaper->escapeJs($cookieLifeTime) ?>);
+        const expirationTime = klevuCustomerData.nowUnixtime + parseInt({$escaper->escapeJs($cookieLifeTime)});
 
         document.cookie = name + "=" + JSON.stringify(data)
             + "; expires=" + new Date(expirationTime * 1000).toUTCString()
-            + "; path=<?= $escaper->escapeJs($cookiePath) ?>"
+            + "; path={$escaper->escapeJs($cookiePath)}"
             + "; samesite=strict";
     }
 
@@ -139,7 +140,7 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
      */
     klevuCustomerData.getFromSessionStorage ??= function () {
         return JSON.parse(
-            window.sessionStorage.getItem('<?= $escaper->escapeJs($sessionStorageKey) ?>')
+            window.sessionStorage.getItem('{$escaper->escapeJs($sessionStorageKey)}')
             || '{}'
         );
     }
@@ -152,7 +153,7 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
             data = {};
         }
         window.sessionStorage.setItem(
-            '<?= $escaper->escapeJs($sessionStorageKey) ?>',
+            '{$escaper->escapeJs($sessionStorageKey)}',
             JSON.stringify(data)
         );
     }
@@ -161,25 +162,25 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
      * @returns {boolean}
      */
     klevuCustomerData.isRefreshSessionDataRequired ??= function () {
-        const cookie = klevuCustomerData.getCookie("<?= $escaper->escapeJs($cookieKey) ?>");
+        const cookie = klevuCustomerData.getCookie("{$escaper->escapeJs($cookieKey)}");
 
-        const expireSections = cookie.<?= $escaper->escapeJs($expireSectionsKey) ?>;
+        const expireSections = cookie.{$escaper->escapeJs($expireSectionsKey)};
         if (typeof expireSections !== "object") {
             return true;
         }
-        const expireCustomerDataTime = expireSections.<?= $escaper->escapeJs($cookieCustomerDataKey) ?> || -1;
+        const expireCustomerDataTime = expireSections.{$escaper->escapeJs($cookieCustomerDataKey)} || -1;
         if (expireCustomerDataTime < klevuCustomerData.nowUnixtime) {
             return true;
         }
         const data = {
             ...{
-                <?= $escaper->escapeJs($sessionCustomerDataKey) ?>: {
+                {$escaper->escapeJs($sessionCustomerDataKey)}: {
                     revalidate_after: -1
                 }
             },
             ...(klevuCustomerData.getFromSessionStorage())
         }
-        const revalidateAfter = data.<?= $escaper->escapeJs($sessionCustomerDataKey) ?>.revalidate_after;
+        const revalidateAfter = data.{$escaper->escapeJs($sessionCustomerDataKey)}.revalidate_after;
 
         return revalidateAfter < klevuCustomerData.nowUnixtime;
     }
@@ -202,11 +203,11 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
                 return;
             }
             let sessionData = klevuCustomerData.getFromSessionStorage();
-            sessionData.<?= $escaper->escapeJs($sessionCustomerDataKey) ?> = JSON.parse(this.response);
+            sessionData.{$escaper->escapeJs($sessionCustomerDataKey)} = JSON.parse(this.response);
             klevuCustomerData.setInSessionStorage(sessionData);
             document.dispatchEvent(klevuCustomerData.LoadedEvent);
         };
-        xmlHttpRequest.open('GET', '<?= $escaper->escapeUrl($customerDataEndpoint) ?>', false);
+        xmlHttpRequest.open('GET', '{$escaper->escapeUrl($customerDataEndpoint)}', false);
         xmlHttpRequest.send();
     }
 
@@ -225,4 +226,12 @@ $sessionCustomerDataKey = $sessionStorageViewModel->getSessionCustomerDataSectio
 
     klevuCustomerData.initialize();
 
-</script>
+script;
+// phpcs:enable Generic.Files.LineLength.TooLong
+?>
+<?= $secureRenderer->renderTag(
+    tagName: 'script',
+    attributes: ['type' => 'text/javascript', 'id' => 'klevu_initsessiondata'],
+    content: $scriptString,
+    textContent: false
+) ?>

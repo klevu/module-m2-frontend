@@ -21,7 +21,7 @@ $klevuSettings = $viewModel->getKlevuJsSettings();
 <?php if (null !== $klevuSettings): ?>
     <?= /* @noEscape */ $secureRenderer->renderTag(
         tagName: 'script',
-        attributes: ['type' => 'text/javascript'],
+        attributes: ['type' => 'text/javascript', 'id' => 'klevu_settings'],
         content: "\nlet klevuSettings = " . $klevuSettings . "\n",
         textContent: false,
     ) ?>
@@ -36,7 +36,7 @@ $klevuSettings = $viewModel->getKlevuJsSettings();
 
         <?= /* @noEscape */ $secureRenderer->renderTag(
             tagName: 'script',
-            attributes: ['type' => 'text/javascript'],
+            attributes: ['type' => 'text/javascript', 'id' => 'klevu_init'],
             content: "\nif(typeof klevuSettings !== 'undefined'){klevu(klevuSettings);}\n",
             textContent: false,
         ) ?>

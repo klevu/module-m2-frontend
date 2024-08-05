@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Klevu\Frontend\ViewModel\CustomerGroupSuffix;
+use Klevu\Frontend\ViewModel\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @var Template $block
+ * @var CustomerGroupSuffix $customerGroupSuffixViewModel
+ * @var Escaper $escaperViewModel
+ * @var SecureHtmlRenderer $secureRenderer
+ */
+$customerGroupSuffixViewModel = $block->getCustomerGroupSuffixViewModel();
+$escaperViewModel = $block->getEscaperViewModel();
+$escaper = $escaperViewModel->getEscaper();
+?>
+<?php if ($customerGroupSuffixViewModel->isEnabled()): ?>
+<?php
+    $scriptString = <<<script
+
+        const klevu_addPriceSuffixToQueryControl = {
+            name: 'addPriceSuffixToQuery',
+            fire: function (data, scope) {
+                const customerGroupSuffix = klevuCustomerGroupSuffix.getCustomerGroupSuffix();
+                if ("undefined" !== typeof customerGroupSuffix) {
+                    klevu.search.modules.addPriceSuffixToQuery(data, scope, customerGroupSuffix);
+                }
+            }
+        };
+
+        (function (klevu) {
+            klevu.extend(true, klevu.search.modules, {
+                /**
+                 *
+                 * @param data
+                 * @param scope
+                 * @param {string} customerGroupSuffix
+                 */
+                addPriceSuffixToQuery: function (data, scope, customerGroupSuffix) {
+                    if (typeof data.request.current === "undefined") {
+                        return;
+                    }
+                    const recordQueries = klevu.getObjectPath(data, "request.current.recordQueries", []);
+                    klevu.each(recordQueries, function (key, query) {
+                        klevu.setObjectPath(
+                            data,
+                            "localOverrides.query." + query.id + ".settings.priceFieldSuffix",
+                            customerGroupSuffix
+                        );
+                    });
+                },
+            });
+        })(klevu);
+
+        let klevuCustomerGroupSuffix = {
+            /**
+             *
+             * @returns {string|void}
+             */
+            getCustomerGroupSuffix: function () {
+                const baseCurrencyCode = '{$customerGroupSuffixViewModel->getBaseCurrencyCode()}';
+                if ("undefined" === typeof baseCurrencyCode) {
+                    return;
+                }
+                const customerGroupId = klevuCustomerGroupSuffix.getCustomerGroupId();
+                if (!customerGroupId) {
+                    return;
+                }
+                const customerGroupIdPrefix = '{$customerGroupSuffixViewModel->getCustomerGroupIdPrefix()}';
+
+                return baseCurrencyCode + '-' + customerGroupIdPrefix + customerGroupId;
+            },
+            /**
+             *
+             * @returns {number|null}
+             */
+            getCustomerGroupId: function () {
+                const customerData = klevuCustomerGroupSuffix.getCustomerDataFromSessionStorage();
+
+                return ("undefined" !== typeof customerData.customer_group_id)
+                    ? customerData.customer_group_id
+                    : null;
+            },
+            /**
+             *
+             * @returns {*|{}}
+             */
+            getCustomerDataFromSessionStorage: function () {
+                const sessionStorage = JSON.parse(
+                    window.sessionStorage.getItem('{$customerGroupSuffixViewModel->getSessionStorageKey()}') || '{}'
+                );
+                return sessionStorage.{$customerGroupSuffixViewModel->getCustomerDataKey()} || {};
+            },
+        };
+
+script;
+    ?>
+
+    <?= $secureRenderer->renderTag(
+        'script',
+        ['type' => 'text/javascript', 'id' => 'klevu_price_suffix'],
+        $scriptString,
+        false
+    ) ?>
+<?php endif; ?>
