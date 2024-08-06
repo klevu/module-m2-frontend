@@ -8,15 +8,19 @@ declare(strict_types=1);
 
 use Klevu\Frontend\ViewModel\VisibilityFilter;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * @var Template $block
  * @var VisibilityFilter $visibilityFilterViewModel
+ * @var SecureHtmlRenderer $secureRenderer
  */
 $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
 ?>
 <?php if ($visibilityFilterViewModel->isEnabled()): ?>
-    <script>
+    <?php
+    // phpcs:disable Generic.Files.LineLength.TooLong
+    $scriptString = <<<script
 
         let klevuVisibilityFilter = {
             queriesToFilter: [
@@ -128,5 +132,23 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
                 });
             }
         });
-    </script>
+
+script;
+    // phpcs:enable Generic.Files.LineLength.TooLong
+    ?>
+    <?php
+    $scriptString = <<<script
+    window._klvReady = window._klvReady || [];
+    window._klvReady.push(function() {
+        {$scriptString}
+    });
+
+script;
+    ?>
+    <?= $secureRenderer->renderTag(
+        tagName: 'script',
+        attributes: ['type' => 'text/javascript', 'id' => 'klevu_visibility_filter'],
+        content: $scriptString,
+        textContent: false
+    ) ?>
 <?php endif; ?>

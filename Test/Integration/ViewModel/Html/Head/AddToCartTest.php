@@ -199,7 +199,7 @@ class AddToCartTest extends TestCase
     /**
      * @dataProvider dataProvider_invalidIsEnabledConditionType
      */
-    public function testIsEnabled_LogsException_InProductMode_WhenConfigInvalid(mixed $invalidType): void
+    public function testIsEnabled_LogsException_InProductionMode_WhenConfigInvalid(mixed $invalidType): void
     {
         $errorMessage = sprintf(
             'IsEnabledCondition "%s" must be instance of %s; %s received',

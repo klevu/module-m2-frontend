@@ -14,6 +14,7 @@
             <label>Frontend</label>
             <tab>klevu</tab>
             <resource>Klevu_FrontendApi::frontend</resource>
+            <include path="Klevu_Frontend::system/frontend.xml"/>
         </section>
         <section id="klevu_developer">
             <include path="Klevu_Frontend::system/developer.xml"/>

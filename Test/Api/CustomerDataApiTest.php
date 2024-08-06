@@ -117,7 +117,7 @@ class CustomerDataApiTest extends WebapiAbstract
             . 'Customer session is not maintained from the test setup.'
             . 'Fix is taking too long. Will come back to this.',
         );
-        $this->_markTestAsRestOnly();
+        $this->_markTestAsRestOnly(); // @phpstan-ignore-line Remove ignore when test no longer imcomplete
         $this->createCustomer([
             'email' => 'customer.name@domain.url',
         ]);

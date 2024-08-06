@@ -1,5 +1,5 @@
 "Frontend","Frontend"
-"General","General"
+"Pricing","Pricing"
 "Display prices after Customer Group Load","Display prices after Customer Group Load"
 "Recommended if using Customer Group Pricing. This will delay the rendering of prices on the page until the current customer’s group is available, which will ensure the customer group price is displayed rather than the default.","Recommended if using Customer Group Pricing. This will delay the rendering of prices on the page until the current customer’s group is available, which will ensure the customer group price is displayed rather than the default."
 "Frontend Log Level","Frontend Log Level"

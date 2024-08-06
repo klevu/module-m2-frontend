@@ -102,6 +102,13 @@ class AddToCartUrlProvider implements AddToCartUrlProviderInterface
      */
     private function isCartPage(): bool
     {
+        if (
+            !method_exists($this->request, 'getRouteName')
+            || !method_exists($this->request, 'getControllerName')
+        ) {
+            return false;
+        }
+
         return $this->request->getRouteName() === self::ROUTE_NAME
             && $this->request->getControllerName() === self::CONTROLLER_NAME;
     }

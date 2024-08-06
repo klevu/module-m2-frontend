@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="pricing"
+           translate="label"
+           sortOrder="80"
+           showInDefault="1"
+           showInWebsite="1"
+           showInStore="1">
+        <label>Pricing</label>
+        <attribute type="expanded">1</attribute>
+        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+
+        <field id="use_customer_groups"
+               translate="label comment"
+               sortOrder="10"
+               type="select"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1">
+            <config_path>klevu_frontend/pricing/use_customer_groups</config_path>
+            <label>Display prices after Customer Group Load</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>
+                <![CDATA[
+                    Recommended if using Customer Group Pricing.
+                    This will delay the rendering of prices on the page until the current customer’s group is available,
+                    which will ensure the customer group price is displayed rather than the default.
+                ]]>
+            </comment>
+        </field>
+    </group>
+</config>

@@ -6,9 +6,14 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <klevu_frontend>
-            <general>
+            <pricing>
                 <use_customer_groups>0</use_customer_groups>
-            </general>
+            </pricing>
         </klevu_frontend>
+        <klevu_developer>
+            <log_level>
+                <frontend>200</frontend>
+            </log_level>
+        </klevu_developer>
     </default>
 </config>

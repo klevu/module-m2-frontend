@@ -8,26 +8,36 @@ declare(strict_types=1);
 
 use Klevu\FrontendApi\ViewModel\Html\Head\AddToCartInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 // phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable
 
 /**
  * @var Template $block
  * @var AddToCartInterface $addToCartViewModel
+ * @var SecureHtmlRenderer $secureRenderer
  */
-
 $addToCartViewModel = $block->getAddToCartViewModel();
 ?>
 
 <?php if ($addToCartViewModel->isEnabled()): ?>
-    <script>
-        if (undefined !== typeof klevuAddToCart) {
-            document.addEventListener(klevuAddToCart.event.addToCartSuccess, (event) => {
-                event.preventDefault();
-                if ("undefined" !== typeof event.detail) {
-                    klevuAddToCart.dispatchEventAfterCustomerRefresh(event.detail);
-                }
-            });
-        }
-    </script>
+    <?php
+    $scriptString = <<<script
+    if (undefined !== typeof klevuAddToCart) {
+        document.addEventListener(klevuAddToCart.event.addToCartSuccess, (event) => {
+            event.preventDefault();
+            if ("undefined" !== typeof event.detail) {
+                klevuAddToCart.dispatchEventAfterCustomerRefresh(event.detail);
+            }
+        });
+    }
+
+script;
+    ?>
+    <?= $secureRenderer->renderTag(
+        tagName: 'script',
+        attributes: ['type' => 'text/javascript', 'id' => 'klevu_customer_data_refresh'],
+        content: $scriptString,
+        textContent: false
+    ) ?>
 <?php endif; ?>
