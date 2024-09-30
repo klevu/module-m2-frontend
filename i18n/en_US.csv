@@ -17,10 +17,9 @@
 "See Klevu documentation for paths and corresponding types.<br>  If the type for a path is not correct it may cause issues on the frontend.<br> Any data entered here will override data from other fields.","See Klevu documentation for paths and corresponding types.<br>  If the type for a path is not correct it may cause issues on the frontend.<br> Any data entered here will override data from other fields."
 Configuration,Configuration
 "You can find settings to update frontend configuration, under %1Klevu%2 &gt; %1Frontend%2","You can find settings to update frontend configuration, under %1Klevu%2 &gt; %1Frontend%2"
-Advanced configuration options can be found under %1Klevu%2 &gt; %1Developer Settings%2 &gt; %1Frontend%2,Advanced configuration options can be found under %1Klevu%2 &gt; %1Developer Settings%2 &gt; %1Frontend%2
-Useful Links,Useful Links
-Our %1Knowledgebase%2 contains in-depth guides and articles on integrating Klevu with Magento. Some pertinent ones can be found below:,Our %1Knowledgebase%2 contains in-depth guides and articles on integrating Klevu with Magento. Some pertinent ones can be found below:
-Changing the search parameter,Changing the search parameter
-Change the search results URL,Change the search results URL
-Debugging and troubleshooting common issues,Debugging and troubleshooting common issues
-You can also refer to our %1developer documentation%2 if you need to customise the frontend behaviour.,You can also refer to our %1developer documentation%2 if you need to customise the frontend behaviour.
+"Advanced configuration options can be found under %1Klevu%2 &gt; %1Developer Settings%2 &gt; %1Frontend%2","Advanced configuration options can be found under %1Klevu%2 &gt; %1Developer Settings%2 &gt; %1Frontend%2"
+"Useful Links","Useful Links"
+"Our %1Documentation%2 contains in-depth guides and articles on customising Klevu. Some pertinent ones can be found below:","Our %1Documentation%2 contains in-depth guides and articles on customising Klevu. Some pertinent ones can be found below:"
+"Theme JS Customisation","Theme JS Customisation"
+"Change the search results URL","Change the search results URL"
+"Recommendations Widgets","Recommendations Widgets"

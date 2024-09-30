@@ -21,11 +21,12 @@ $viewModel = $block->getJsIncludesViewModel();
 $escaperViewModel = $block->getEscaperViewModel();
 $escaper = $escaperViewModel->getEscaper();
 ?>
-<?php foreach ($viewModel->getLinks() as $link): ?>
+<?php foreach ($viewModel->getLinks() as $id => $link): ?>
     <?= /* @noEscape */ $secureRenderer->renderTag(
         tagName: 'script',
         attributes: [
             'type' => 'text/javascript',
+            'id' => $escaper->escapeHtmlAttr($id),
             'src' => $escaper->escapeUrl(string: $link),
         ],
         textContent: false,

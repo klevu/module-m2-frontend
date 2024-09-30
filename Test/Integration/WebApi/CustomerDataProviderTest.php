@@ -47,13 +47,13 @@ class CustomerDataProviderTest extends TestCase
      */
     private ?ObjectManagerInterface $objectManager = null;
     /**
-     * @var MockObject|SessionManagerInterface
+     * @var MockObject|SessionManagerInterface|null
      */
-    private MockObject|SessionManagerInterface $mockSessionManager;
+    private MockObject|SessionManagerInterface|null $mockSessionManager = null;
     /**
-     * @var string[]|false
+     * @var string[]|false|null
      */
-    private array|false $keys;
+    private array|false|null $keys = null;
 
     /**
      * @return void

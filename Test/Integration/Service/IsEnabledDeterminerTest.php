@@ -46,13 +46,13 @@ class IsEnabledDeterminerTest extends TestCase
      */
     private ?ObjectManagerInterface $objectManager = null;
     /**
-     * @var LoggerInterface|MockObject
+     * @var LoggerInterface|MockObject|null
      */
-    private LoggerInterface|MockObject $mockLogger;
+    private LoggerInterface|MockObject|null $mockLogger = null;
     /**
-     * @var AppState|MockObject
+     * @var AppState|MockObject|null
      */
-    private AppState|MockObject $mockAppState;
+    private AppState|MockObject|null $mockAppState = null;
 
     /**
      * @return void

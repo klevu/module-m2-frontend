@@ -14,4 +14,5 @@ class Constants
     public const KLEVU_SESSION_STORAGE_KEY_CUSTOMER_DATA = 'customerData';
     public const JS_EVENTNAME_CUSTOMER_DATA_LOADED = 'klevu.customerData.loaded';
     public const JS_EVENTNAME_CUSTOMER_DATA_LOAD_ERROR = 'klevu.customerData.loadError';
+    public const XML_PATH_CUSTOMER_GROUP_PRICING = 'klevu_frontend/pricing/use_customer_groups';
 }

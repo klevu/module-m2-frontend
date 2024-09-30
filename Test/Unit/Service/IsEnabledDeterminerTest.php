@@ -22,13 +22,13 @@ use Psr\Log\LoggerInterface;
 class IsEnabledDeterminerTest extends TestCase
 {
     /**
-     * @var LoggerInterface&MockObject
+     * @var LoggerInterface|MockObject|null
      */
-    private LoggerInterface&MockObject $mockLogger;
+    private LoggerInterface|MockObject|null $mockLogger = null;
     /**
-     * @var AppState&MockObject
+     * @var AppState|MockObject|null
      */
-    private AppState&MockObject $mockAppState;
+    private AppState|MockObject|null $mockAppState = null;
 
     protected function setUp(): void
     {

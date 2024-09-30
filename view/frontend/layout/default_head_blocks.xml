@@ -51,10 +51,9 @@
                     </arguments>
                 </block>
 
-                <container name="Klevu_Frontend.session_data" after="-">
+                <container name="Klevu_Frontend.session_data" after="Klevu_Frontend.js_includes">
                     <block name="Klevu_Frontend.init_session_data"
-                           template="Klevu_Frontend::html/head/customer_data.phtml"
-                           after="Klevu_Frontend.js_includes">
+                           template="Klevu_Frontend::html/head/customer_data.phtml">
                         <arguments>
                             <argument name="cookie_view_model"
                                       xsi:type="object">Klevu\Frontend\ViewModel\Cookie</argument>

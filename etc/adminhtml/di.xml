@@ -5,14 +5,14 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <virtualType name="Klevu\Configuration\ViewModel\Config\Information\KnowledgeBase"
-                 type="Klevu\Configuration\ViewModel\Config\Information\ArticleList">
+    <virtualType name="Klevu\Configuration\ViewModel\Config\Information\KnowledgeBase">
         <arguments>
             <argument name="articles" xsi:type="array">
-                <item name="frontend" xsi:type="array">
-                    <item name="custom_jsv2_settings" xsi:type="array">
-                        <item name="link" xsi:type="string"><![CDATA[https://help.klevu.com/replace-me/custom-jsv2-setting-in-magento-admin]]></item>
-                        <item name="order" xsi:type="number">20</item>
+                <item name="documentation" xsi:type="array">
+                    <item name="frontend" xsi:type="array">
+                        <item name="link" xsi:type="string"><![CDATA[https://docs.klevu.com/klevu-magento-v4/frontend-overview]]></item>
+                        <item name="order" xsi:type="number">100</item>
+                        <item name="title" xsi:type="string">Frontend</item>
                     </item>
                 </item>
             </argument>

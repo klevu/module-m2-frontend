@@ -35,29 +35,32 @@ $escaper = $escaperViewModel->getEscaper();
             }
         };
 
-        (function (klevu) {
-            klevu.extend(true, klevu.search.modules, {
-                /**
-                 *
-                 * @param data
-                 * @param scope
-                 * @param {string} customerGroupSuffix
-                 */
-                addPriceSuffixToQuery: function (data, scope, customerGroupSuffix) {
-                    if (typeof data.request.current === "undefined") {
-                        return;
-                    }
-                    const recordQueries = klevu.getObjectPath(data, "request.current.recordQueries", []);
-                    klevu.each(recordQueries, function (key, query) {
-                        klevu.setObjectPath(
-                            data,
-                            "localOverrides.query." + query.id + ".settings.priceFieldSuffix",
-                            customerGroupSuffix
-                        );
-                    });
-                },
-            });
-        })(klevu);
+        window._klvReady = window._klvReady || [];
+        window._klvReady.push(function() {
+            (function (klevu) {
+                klevu.extend(true, klevu.search.modules, {
+                    /**
+                     *
+                     * @param data
+                     * @param scope
+                     * @param {string} customerGroupSuffix
+                     */
+                    addPriceSuffixToQuery: function (data, scope, customerGroupSuffix) {
+                        if (typeof data.request.current === "undefined") {
+                            return;
+                        }
+                        const recordQueries = klevu.getObjectPath(data, "request.current.recordQueries", []);
+                        klevu.each(recordQueries, function (key, query) {
+                            klevu.setObjectPath(
+                                data,
+                                "localOverrides.query." + query.id + ".settings.priceFieldSuffix",
+                                customerGroupSuffix
+                            );
+                        });
+                    },
+                });
+            })(klevu);
+        });
 
         let klevuCustomerGroupSuffix = {
             /**

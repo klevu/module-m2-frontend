@@ -30,7 +30,7 @@ $addToCartViewModel = $block->getAddToCartViewModel();
             require([
                 'Magento_Customer/js/customer-data'
             ], function (customerData) {
-                const sections = ['cart'];
+                const sections = ['cart', 'klevu_metadata_cart'];
                 customerData.invalidate(sections);
                 customerData.reload(sections, true);
 
