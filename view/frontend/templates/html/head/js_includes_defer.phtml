@@ -9,22 +9,36 @@ declare(strict_types=1);
 use Klevu\Frontend\ViewModel\Escaper;
 use Klevu\FrontendApi\ViewModel\JsIncludesInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * @var Template $block
  * @var Escaper $escaperViewModel
  * @var JsIncludesInterface $viewModel
+ * @var SecureHtmlRenderer $secureRenderer
  */
 $viewModel = $block->getJsIncludesViewModel();
 $escaperViewModel = $block->getEscaperViewModel();
 $escaper = $escaperViewModel->getEscaper();
 ?>
 
-<script>
-    <?php foreach ($viewModel->getLinks() as $link): ?>
-        const script = document.createElement('script');
-        script.src = '<?= $escaper->escapeUrl(string: $link) ?>';
-        script.type = 'text/javascript';
-        document.head.append(script);
-    <?php endforeach; ?>
-</script>
+<?php foreach ($viewModel->getLinks() as $id => $link): ?>
+    <?php
+    $scriptString = <<<script
+    let deferredScript = document.createElement('script');
+        deferredScript.type = 'text/javascript';
+        deferredScript.id = '{$escaper->escapeHtmlAttr($id)}';
+        deferredScript.src = '{$escaper->escapeUrl(string: $link)}';
+        document.head.append(deferredScript);
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag(
+        tagName: 'script',
+        attributes: [
+            'type' => 'text/javascript',
+            'id' => 'klevu_include_defer_' . $escaper->escapeHtmlAttr($id),
+        ],
+        content: $scriptString,
+        textContent: false,
+    ) ?>
+<?php endforeach; ?>

@@ -49,9 +49,9 @@ $escaper = $escaperViewModel->getEscaper();
             <p>
                 <?= $escaper->escapeHtml(
                     data: __(
-                        'Our %1Knowledgebase%2 contains in-depth guides and articles on integrating Klevu with '
-                        . 'Magento. Some pertinent ones can be found below:',
-                        '<a href="https://help.klevu.com/support/solutions/5000174077" target="_blank">',
+                        'Our %1Documentation%2 contains in-depth guides and articles on the Klevu Frontend. '
+                        . 'Some pertinent ones can be found below:',
+                        '<a href="https://docs.klevu.com/klevu-magento-v4/frontend-overview" target="_blank">',
                         '</a>',
                     )->render(),
                     allowedTags: ['a'],
@@ -59,34 +59,23 @@ $escaper = $escaperViewModel->getEscaper();
             </p>
             <ul style="margin-left: 20px;">
                 <li>
-                    <a href=""
+                    <a href="https://docs.klevu.com/klevu-magento-v4/frontend-theme-js-overview"
                        target="_blank"
-                       ><?= $escaper->escapeHtml(__('Changing the search parameter')->render()) ?></a>
+                       ><?= $escaper->escapeHtml(__('Theme JS Customisation')->render()) ?></a>
                 </li>
                 <li>
-                    <a href=""
+                    <a href="https://docs.klevu.com/klevu-magento-v4/change-search-result-landing-page-srlp-url"
                        target="_blank"
                        ><?= $escaper->escapeHtml(__('Change the search results URL')->render()) ?></a>
                 </li>
                 <li>
-                    <a href=""
+                    <a href="https://docs.klevu.com/klevu-magento-v4/recommendation-widgets"
                        target="_blank"
                        ><?= $escaper->escapeHtml(
-                            __('Debugging and troubleshooting common issues')->render(),
+                            __('Recommendations Widgets')->render(),
                         ) ?></a>
                 </li>
             </ul>
-            <p>
-                <?= $escaper->escapeHtml(
-                    data: __(
-                        'You can also refer to our %1developer documentation%2 if you need to customise the '
-                        . 'frontend behaviour.',
-                        '<a href="" target="_blank">',
-                        '</a>',
-                    )->render(),
-                    allowedTags: ['a'],
-                ) ?>
-            </p>
         </section>
     </div>
 </section>
