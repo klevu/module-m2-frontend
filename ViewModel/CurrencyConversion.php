@@ -120,7 +120,67 @@ class CurrencyConversion implements CurrencyConversionInterface
     }
 
     /**
-     * @return string[]
+     * @return int
+     */
+    public function getCurrencyPrecision(): int
+    {
+        $data = $this->getCurrencyData();
+
+        return $data[CurrencyProvider::CURRENCY_PRECISION];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyDecimalSymbol(): string
+    {
+        $data = $this->getCurrencyData();
+
+        return $data[CurrencyProvider::CURRENCY_DECIMAL_SYMBOL];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyGroupSymbol(): string
+    {
+        $data = $this->getCurrencyData();
+
+        return $data[CurrencyProvider::CURRENCY_GROUP_SYMBOL];
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrencyGroupLength(): int
+    {
+        $data = $this->getCurrencyData();
+
+        return $data[CurrencyProvider::CURRENCY_GROUP_LENGTH];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyFormat(): string
+    {
+        $data = $this->getCurrencyData();
+
+        return $data[CurrencyProvider::CURRENCY_FORMAT];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyAppendAtLast(): string
+    {
+        $data = $this->getCurrencyData();
+
+        return $data[CurrencyProvider::CURRENCY_APPEND_AT_LAST] ? "true" : "false";
+    }
+
+    /**
+     * @return array<int|float|string>
      */
     private function getCurrencyData(): array
     {

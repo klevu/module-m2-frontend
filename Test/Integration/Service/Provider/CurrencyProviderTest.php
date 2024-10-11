@@ -102,21 +102,16 @@ class CurrencyProviderTest extends TestCase
         );
         ConfigFixture::setGlobal(
             path: DirctoryCurrency::XML_PATH_CURRENCY_ALLOW,
-            value: 'GBP,EUR,USD',
+            value: 'EUR,GBP,INR,JPY,KWD,USD',
         );
 
         $exchangeRates = [
             'USD' => [
                 'EUR' => 0.8,
                 'GBP' => 0.9,
-            ],
-            'EUR' => [
-                'USD' => 1.2,
-                'GBP' => 0.9,
-            ],
-            'GBP' => [
-                'EUR' => 0.9,
-                'USD' => 1.1,
+                'INR' => 83.95,
+                'JPY' => 150,
+                'KWD' => 0.305,
             ],
         ];
         $this->setExchangeRates(rates: $exchangeRates);
@@ -124,25 +119,116 @@ class CurrencyProviderTest extends TestCase
         $provider = $this->instantiateTestObject();
         $result = $provider->get();
 
-        $this->assertCount(expectedCount: 3, haystack: $result);
+        $this->assertCount(expectedCount: 6, haystack: $result);
 
         $this->assertArrayHasKey(key: 'EUR', array: $result);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_RATE, array: $result['EUR']);
         $this->assertSame(expected: 0.8, actual: $result['EUR'][CurrencyProvider::CURRENCY_RATE]);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['EUR']);
         $this->assertSame(expected: '€', actual: $result['EUR'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['EUR']);
+        $this->assertSame(expected: 2, actual: $result['EUR'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['EUR']);
+        $this->assertSame(expected: '.', actual: $result['EUR'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['EUR']);
+        $this->assertSame(expected: ',', actual: $result['EUR'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['EUR']);
+        $this->assertSame(expected: 3, actual: $result['EUR'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['EUR']);
+        $this->assertFalse(condition: $result['EUR'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['EUR']);
+        $this->assertSame(expected: '%s%s', actual: $result['EUR'][CurrencyProvider::CURRENCY_FORMAT]);
 
         $this->assertArrayHasKey(key: 'GBP', array: $result);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_RATE, array: $result['GBP']);
         $this->assertSame(expected: 0.9, actual: $result['GBP'][CurrencyProvider::CURRENCY_RATE]);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['GBP']);
         $this->assertSame(expected: '£', actual: $result['GBP'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['GBP']);
+        $this->assertSame(expected: 2, actual: $result['GBP'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['GBP']);
+        $this->assertSame(expected: '.', actual: $result['GBP'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['GBP']);
+        $this->assertSame(expected: ',', actual: $result['GBP'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['GBP']);
+        $this->assertSame(expected: 3, actual: $result['GBP'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['GBP']);
+        $this->assertFalse(condition: $result['GBP'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['GBP']);
+        $this->assertSame(expected: '%s%s', actual: $result['GBP'][CurrencyProvider::CURRENCY_FORMAT]);
+
+        $this->assertArrayHasKey(key: 'INR', array: $result);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_RATE, array: $result['INR']);
+        $this->assertSame(expected: 83.95, actual: $result['INR'][CurrencyProvider::CURRENCY_RATE]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['INR']);
+        $this->assertSame(expected: '₹', actual: $result['INR'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['INR']);
+        $this->assertSame(expected: 2, actual: $result['INR'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['INR']);
+        $this->assertSame(expected: '.', actual: $result['INR'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['INR']);
+        $this->assertSame(expected: ',', actual: $result['INR'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['INR']);
+        $this->assertSame(expected: 3, actual: $result['INR'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['INR']);
+        $this->assertFalse(condition: $result['INR'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['INR']);
+        $this->assertSame(expected: '%s%s', actual: $result['INR'][CurrencyProvider::CURRENCY_FORMAT]);
+
+        $this->assertArrayHasKey(key: 'JPY', array: $result);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_RATE, array: $result['JPY']);
+        $this->assertSame(expected: 150.0, actual: $result['JPY'][CurrencyProvider::CURRENCY_RATE]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['JPY']);
+        $this->assertSame(expected: '¥', actual: $result['JPY'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['JPY']);
+        $this->assertSame(expected: 0, actual: $result['JPY'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['JPY']);
+        $this->assertSame(expected: '.', actual: $result['JPY'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['JPY']);
+        $this->assertSame(expected: ',', actual: $result['JPY'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['JPY']);
+        $this->assertSame(expected: 3, actual: $result['JPY'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['JPY']);
+        $this->assertFalse(condition: $result['JPY'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['JPY']);
+        $this->assertSame(expected: '%s%s', actual: $result['JPY'][CurrencyProvider::CURRENCY_FORMAT]);
+
+        $this->assertArrayHasKey(key: 'KWD', array: $result);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_RATE, array: $result['KWD']);
+        $this->assertSame(expected: 0.305, actual: $result['KWD'][CurrencyProvider::CURRENCY_RATE]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['KWD']);
+        $this->assertSame(expected: 'KWD', actual: $result['KWD'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['KWD']);
+        $this->assertSame(expected: 3, actual: $result['KWD'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['KWD']);
+        $this->assertSame(expected: '.', actual: $result['KWD'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['KWD']);
+        $this->assertSame(expected: ',', actual: $result['KWD'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['KWD']);
+        $this->assertSame(expected: 3, actual: $result['KWD'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['KWD']);
+        $this->assertFalse(condition: $result['KWD'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['KWD']);
+        $this->assertSame(expected: '%s %s', actual: $result['KWD'][CurrencyProvider::CURRENCY_FORMAT]);
 
         $this->assertArrayHasKey(key: 'USD', array: $result);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_RATE, array: $result['USD']);
         $this->assertSame(expected: 1.0, actual: $result['USD'][CurrencyProvider::CURRENCY_RATE]);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['USD']);
         $this->assertSame(expected: '$', actual: $result['USD'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['USD']);
+        $this->assertSame(expected: 2, actual: $result['USD'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['USD']);
+        $this->assertSame(expected: '.', actual: $result['USD'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['USD']);
+        $this->assertSame(expected: ',', actual: $result['USD'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['USD']);
+        $this->assertSame(expected: 3, actual: $result['USD'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['USD']);
+        $this->assertFalse(condition: $result['USD'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['USD']);
+        $this->assertSame(expected: '%s%s', actual: $result['USD'][CurrencyProvider::CURRENCY_FORMAT]);
+
     }
 
     /**
@@ -164,6 +250,10 @@ class CurrencyProviderTest extends TestCase
             value: 'USD',
             storeCode: $storeFixture->getCode(),
         );
+        ConfigFixture::setGlobal(
+            path: DirctoryCurrency::XML_PATH_CURRENCY_ALLOW,
+            value: 'USD',
+        );
         ConfigFixture::setForStore(
             path: DirctoryCurrency::XML_PATH_CURRENCY_ALLOW,
             value: 'GBP,USD',
@@ -174,14 +264,6 @@ class CurrencyProviderTest extends TestCase
             'USD' => [
                 'EUR' => 0.8,
                 'GBP' => 0.9,
-            ],
-            'EUR' => [
-                'USD' => 1.2,
-                'GBP' => 0.9,
-            ],
-            'GBP' => [
-                'EUR' => 0.9,
-                'USD' => 1.1,
             ],
         ];
         $this->setExchangeRates(rates: $exchangeRates);
@@ -198,12 +280,36 @@ class CurrencyProviderTest extends TestCase
         $this->assertSame(expected: 0.9, actual: $result['GBP'][CurrencyProvider::CURRENCY_RATE]);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['GBP']);
         $this->assertSame(expected: '£', actual: $result['GBP'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['GBP']);
+        $this->assertSame(expected: 2, actual: $result['GBP'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['GBP']);
+        $this->assertSame(expected: '.', actual: $result['GBP'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['GBP']);
+        $this->assertSame(expected: ',', actual: $result['GBP'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['GBP']);
+        $this->assertSame(expected: 3, actual: $result['GBP'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['GBP']);
+        $this->assertFalse(condition: $result['GBP'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['GBP']);
+        $this->assertSame(expected: '%s%s', actual: $result['GBP'][CurrencyProvider::CURRENCY_FORMAT]);
 
         $this->assertArrayHasKey(key: 'USD', array: $result);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_RATE, array: $result['USD']);
         $this->assertSame(expected: 1.0, actual: $result['USD'][CurrencyProvider::CURRENCY_RATE]);
         $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_SYMBOL, array: $result['USD']);
         $this->assertSame(expected: '$', actual: $result['USD'][CurrencyProvider::CURRENCY_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_PRECISION, array: $result['USD']);
+        $this->assertSame(expected: 2, actual: $result['USD'][CurrencyProvider::CURRENCY_PRECISION]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['USD']);
+        $this->assertSame(expected: '.', actual: $result['USD'][CurrencyProvider::CURRENCY_DECIMAL_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_SYMBOL, array: $result['USD']);
+        $this->assertSame(expected: ',', actual: $result['USD'][CurrencyProvider::CURRENCY_GROUP_SYMBOL]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_GROUP_LENGTH, array: $result['USD']);
+        $this->assertSame(expected: 3, actual: $result['USD'][CurrencyProvider::CURRENCY_GROUP_LENGTH]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_APPEND_AT_LAST, array: $result['USD']);
+        $this->assertFalse(condition: $result['USD'][CurrencyProvider::CURRENCY_APPEND_AT_LAST]);
+        $this->assertArrayHasKey(key: CurrencyProvider::CURRENCY_FORMAT, array: $result['USD']);
+        $this->assertSame(expected: '%s%s', actual: $result['USD'][CurrencyProvider::CURRENCY_FORMAT]);
     }
 
     /**

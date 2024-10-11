@@ -26,15 +26,7 @@
                                   xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
                     </arguments>
                 </block>
-                <block name="Klevu_Frontend.price_formatter"
-                       template="Klevu_Frontend::price_formatter.phtml">
-                    <arguments>
-                        <argument name="currency_conversion_view_model"
-                                  xsi:type="object">Klevu\Frontend\ViewModel\CurrencyConversion</argument>
-                        <argument name="escaper_view_model"
-                                  xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
-                    </arguments>
-                </block>
+
                 <block name="Klevu_Frontend.visibility_filter"
                        template="Klevu_Frontend::visibility_filter.phtml">
                     <arguments>

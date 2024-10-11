@@ -28,13 +28,13 @@ $escaper = $escaperViewModel->getEscaper();
             var klevu_uc_userOptions = {};
         }
         klevu_uc_userOptions.priceFormatter = {
-            appendCurrencyAtLast: false,
-            currencySymbol: "{$escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol())}",
-            decimalPlaces: 2,
-            decimalSeparator: ".",
-            thousandSeparator: ",",
-            format: "%s%s",
-            grouping: 3,
+            "appendCurrencyAtLast": {$escaper->escapeJs($currencyConversionViewModel->getCurrencyAppendAtLast())},
+            "currencySymbol": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol())}",
+            "decimalPlaces": {$escaper->escapeJs($currencyConversionViewModel->getCurrencyPrecision())},
+            "decimalSeparator": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencyDecimalSymbol())}",
+            "thousandSeparator": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencyGroupSymbol())}",
+            "format": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencyFormat())}",
+            "grouping": {$escaper->escapeJs($currencyConversionViewModel->getCurrencyGroupLength())},
         };
 
 script;

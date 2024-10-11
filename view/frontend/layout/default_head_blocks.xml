@@ -67,6 +67,18 @@
                     </block>
                 </container>
 
+                <block name="Klevu_Frontend.price_formatter"
+                       template="Klevu_Frontend::price_formatter.phtml"
+                        after="Klevu_Frontend.js_includes.core"
+                        before="Klevu_Frontend.js_includes">
+                    <arguments>
+                        <argument name="currency_conversion_view_model"
+                                  xsi:type="object">Klevu\Frontend\ViewModel\CurrencyConversion</argument>
+                        <argument name="escaper_view_model"
+                                  xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
+                    </arguments>
+                </block>
+
             </container>
         </referenceBlock>
     </body>

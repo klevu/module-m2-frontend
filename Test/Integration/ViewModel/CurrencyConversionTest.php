@@ -167,43 +167,87 @@ class CurrencyConversionTest extends TestCase
         );
         ConfigFixture::setForStore(
             path: Currency::XML_PATH_CURRENCY_ALLOW,
-            value: 'USD,GBP,EUR',
+            value: 'EUR,GBP,INR,JPY,KWD,USD',
             storeCode: $storeFixture->getCode(),
         );
 
         $exchangeRates = [
-            'USD' => [
-                'EUR' => 0.8,
-                'GBP' => 0.9,
-            ],
             'EUR' => [
-                'USD' => 1.2,
                 'GBP' => 1.1,
-            ],
-            'GBP' => [
-                'EUR' => 0.9,
-                'USD' => 1.1,
+                'INR' => 83.95,
+                'JPY' => 150,
+                'KWD' => 0.305,
+                'USD' => 1.2,
             ],
         ];
         $this->setExchangeRates(rates: $exchangeRates);
-        $store->setCurrentCurrencyCode('GBP');
-        $this->storeManager->setCurrentStore($store);
-
         $viewModel = $this->instantiateTestObject();
-        $this->assertSame(expected: 1.1, actual: $viewModel->getExchangeRate());
-        $this->assertSame(expected: '£', actual: $viewModel->getCurrencySymbol());
-
-        $store->setCurrentCurrencyCode('USD');
-        $this->storeManager->setCurrentStore($store);
-
-        $this->assertSame(expected: 1.2, actual: $viewModel->getExchangeRate());
-        $this->assertSame(expected: '$', actual: $viewModel->getCurrencySymbol());
 
         $store->setCurrentCurrencyCode('EUR');
         $this->storeManager->setCurrentStore($store);
-
         $this->assertSame(expected: 1.0, actual: $viewModel->getExchangeRate());
         $this->assertSame(expected: '€', actual: $viewModel->getCurrencySymbol());
+        $this->assertSame(expected: '.', actual: $viewModel->getCurrencyDecimalSymbol());
+        $this->assertSame(expected: ',', actual: $viewModel->getCurrencyGroupSymbol());
+        $this->assertSame(expected: 2, actual: $viewModel->getCurrencyPrecision());
+        $this->assertSame(expected: 3, actual: $viewModel->getCurrencyGroupLength());
+        $this->assertSame(expected: '%s%s', actual: $viewModel->getCurrencyFormat());
+        $this->assertSame(expected: 'false', actual: $viewModel->getCurrencyAppendAtLast());
+
+        $store->setCurrentCurrencyCode('GBP');
+        $this->storeManager->setCurrentStore($store);
+        $this->assertSame(expected: 1.1, actual: $viewModel->getExchangeRate());
+        $this->assertSame(expected: '£', actual: $viewModel->getCurrencySymbol());
+        $this->assertSame(expected: '.', actual: $viewModel->getCurrencyDecimalSymbol());
+        $this->assertSame(expected: ',', actual: $viewModel->getCurrencyGroupSymbol());
+        $this->assertSame(expected: 2, actual: $viewModel->getCurrencyPrecision());
+        $this->assertSame(expected: 3, actual: $viewModel->getCurrencyGroupLength());
+        $this->assertSame(expected: '%s%s', actual: $viewModel->getCurrencyFormat());
+        $this->assertSame(expected: 'false', actual: $viewModel->getCurrencyAppendAtLast());
+
+        $store->setCurrentCurrencyCode('INR');
+        $this->storeManager->setCurrentStore($store);
+        $this->assertSame(expected: 83.95, actual: $viewModel->getExchangeRate());
+        $this->assertSame(expected: '₹', actual: $viewModel->getCurrencySymbol());
+        $this->assertSame(expected: '.', actual: $viewModel->getCurrencyDecimalSymbol());
+        $this->assertSame(expected: ',', actual: $viewModel->getCurrencyGroupSymbol());
+        $this->assertSame(expected: 2, actual: $viewModel->getCurrencyPrecision());
+        $this->assertSame(expected: 3, actual: $viewModel->getCurrencyGroupLength());
+        $this->assertSame(expected: '%s%s', actual: $viewModel->getCurrencyFormat());
+        $this->assertSame(expected: 'false', actual: $viewModel->getCurrencyAppendAtLast());
+
+        $store->setCurrentCurrencyCode('JPY');
+        $this->storeManager->setCurrentStore($store);
+        $this->assertSame(expected: 150.0, actual: $viewModel->getExchangeRate());
+        $this->assertSame(expected: '¥', actual: $viewModel->getCurrencySymbol());
+        $this->assertSame(expected: '.', actual: $viewModel->getCurrencyDecimalSymbol());
+        $this->assertSame(expected: ',', actual: $viewModel->getCurrencyGroupSymbol());
+        $this->assertSame(expected: 0, actual: $viewModel->getCurrencyPrecision());
+        $this->assertSame(expected: 3, actual: $viewModel->getCurrencyGroupLength());
+        $this->assertSame(expected: '%s%s', actual: $viewModel->getCurrencyFormat());
+        $this->assertSame(expected: 'false', actual: $viewModel->getCurrencyAppendAtLast());
+
+        $store->setCurrentCurrencyCode('KWD');
+        $this->storeManager->setCurrentStore($store);
+        $this->assertSame(expected: 0.305, actual: $viewModel->getExchangeRate());
+        $this->assertSame(expected: 'KWD', actual: $viewModel->getCurrencySymbol());
+        $this->assertSame(expected: '.', actual: $viewModel->getCurrencyDecimalSymbol());
+        $this->assertSame(expected: ',', actual: $viewModel->getCurrencyGroupSymbol());
+        $this->assertSame(expected: 3, actual: $viewModel->getCurrencyPrecision());
+        $this->assertSame(expected: 3, actual: $viewModel->getCurrencyGroupLength());
+        $this->assertSame(expected: '%s %s', actual: $viewModel->getCurrencyFormat());
+        $this->assertSame(expected: 'false', actual: $viewModel->getCurrencyAppendAtLast());
+        
+        $store->setCurrentCurrencyCode('USD');
+        $this->storeManager->setCurrentStore($store);
+        $this->assertSame(expected: 1.2, actual: $viewModel->getExchangeRate());
+        $this->assertSame(expected: '$', actual: $viewModel->getCurrencySymbol());
+        $this->assertSame(expected: '.', actual: $viewModel->getCurrencyDecimalSymbol());
+        $this->assertSame(expected: ',', actual: $viewModel->getCurrencyGroupSymbol());
+        $this->assertSame(expected: 2, actual: $viewModel->getCurrencyPrecision());
+        $this->assertSame(expected: 3, actual: $viewModel->getCurrencyGroupLength());
+        $this->assertSame(expected: '%s%s', actual: $viewModel->getCurrencyFormat());
+        $this->assertSame(expected: 'false', actual: $viewModel->getCurrencyAppendAtLast());
     }
 
     /**
