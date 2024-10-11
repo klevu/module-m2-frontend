@@ -27,9 +27,14 @@ $escaper = $escaperViewModel->getEscaper();
     let klevuCurrency = {
         exchangeRate: {$escaper->escapeJs($currencyConversionViewModel->getExchangeRate())},
         symbol: "{$escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol())}",
+        precision: {$escaper->escapeJs($currencyConversionViewModel->getCurrencyPrecision())},
         originalData: {
             start: null,
             end: null,
+        },
+
+        getMultiplier: function () {
+            return Math.pow(10, klevuCurrency.precision);
         },
 
         toLocal: function toLocal(value) {
@@ -37,9 +42,10 @@ $escaper = $escaperViewModel->getEscaper();
                 return value;
             }
             if (value) {
-                value = Math.round(value * klevuCurrency.exchangeRate * 100) / 100
+                const multiplier = klevuCurrency.getMultiplier();
+                value = Math.round(value * klevuCurrency.exchangeRate * multiplier) / multiplier
             }
-            return Math.round(value);
+            return value;
         },
 
         toBase: function toBase(value) {
@@ -47,9 +53,10 @@ $escaper = $escaperViewModel->getEscaper();
                 return value;
             }
             if (value) {
-                value = Math.round(value / klevuCurrency.exchangeRate * 100) / 100
+                const multiplier = klevuCurrency.getMultiplier();
+                value = Math.round((value / klevuCurrency.exchangeRate) * multiplier) / multiplier
             }
-            return Math.round(value);
+            return value;
         },
 
         convertProductPrice: function (productRecords) {
@@ -57,7 +64,7 @@ $escaper = $escaperViewModel->getEscaper();
                 // recommendations requires this symbol replacement
                 product.currency = klevuCurrency.symbol;
                 // check if conversion has already been processed
-                if (parseFloat(product.basePrice) !== parseFloat(product.price)) {
+                if (parseFloat(product.basePrice) !== parseFloat(product.salePrice)) {
                     return;
                 }
                 if (klevu.isNumeric(product.price)) {
