@@ -115,7 +115,7 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
                 klevu.each(klevuVisibilityFilter.getRequestsToFilter(data), function (index, request) {
                     let localOverrideGroupCondition = klevuVisibilityFilter.getLocalOverrideGroupCondition(data, request);
                     klevu.each(localOverrideGroupCondition.conditions, function (index, condition) {
-                        if (condition.key === 'visibility') {
+                        if (condition && condition.key === 'visibility') {
                             // remove visibility from conditions if already set
                             localOverrideGroupCondition.conditions.splice(index, 1);
                         }
