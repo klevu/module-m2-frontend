@@ -44,6 +44,9 @@ class SettingsProviderTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGet_ReturnsDefault_WhenNoDataSet(): void
     {
         $provider = $this->instantiateTestObject([
@@ -54,6 +57,7 @@ class SettingsProviderTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoConfigFixture default/klevu/core_config_path/setting true
      * @magentoConfigFixture default_store klevu/core_config_path/setting true
      */
@@ -67,6 +71,7 @@ class SettingsProviderTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoConfigFixture default/klevu/core_config_path/setting 12
      * @magentoConfigFixture default_store klevu/core_config_path/setting 12
      */
@@ -83,6 +88,7 @@ class SettingsProviderTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoConfigFixture default/klevu/core_config_path/setting value
      * @magentoConfigFixture default_store klevu/core_config_path/setting value
      */
@@ -100,6 +106,7 @@ class SettingsProviderTest extends TestCase
 
     // phpcs:disable Generic.Files.LineLength.TooLong
     /**
+     * @magentoAppIsolation enabled
      * @magentoConfigFixture default/klevu/core_config_path/setting config_setting
      * @magentoConfigFixture default_store klevu/core_config_path/setting config_setting
      * @magentoConfigFixture default/klevu_frontend/general/klevu_settings {"_1692439469779_779":{"path":"section.Setting","type":"3","value":"custom_setting"}}
