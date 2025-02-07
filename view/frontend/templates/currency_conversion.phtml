@@ -23,10 +23,10 @@ $escaper = $escaperViewModel->getEscaper();
 ?>
 <?php if ($currencyConversionViewModel->isEnabled()): ?>
     <?php
-    $scriptString = <<<script
+    $scriptString = "
     let klevuCurrency = {
         exchangeRate: {$escaper->escapeJs($currencyConversionViewModel->getExchangeRate())},
-        symbol: "{$escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol())}",
+        symbol: '{$escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol())}',
         precision: {$escaper->escapeJs($currencyConversionViewModel->getCurrencyPrecision())},
         originalData: {
             start: null,
@@ -123,14 +123,14 @@ $escaper = $escaperViewModel->getEscaper();
     };
 
     klevu.event.webhook.attach({
-        object: "search",
-        scope: "all",
-        name: "chains.template.process.success",
-        action: "before",
+        object: 'search',
+        scope: 'all',
+        name: 'chains.template.process.success',
+        action: 'before',
         fire: function (data, scope) {
-            let templateQueries = klevu.getObjectPath(data, "template.query", false);
+            let templateQueries = klevu.getObjectPath(data, 'template.query', false);
             if (templateQueries) {
-                // loop through each type "templateQuery" as they are different for recs and search results
+                // loop through each type 'templateQuery' as they are different for recs and search results
                 klevu.each(templateQueries, function (queryKey, templateQuery) {
                     let productRecords = templateQuery.result;
                     if (productRecords) {
@@ -146,14 +146,14 @@ $escaper = $escaperViewModel->getEscaper();
     });
 
     klevu.event.webhook.attach({
-        object: "search",
-        scope: "all",
-        name: "chains.request.build",
-        action: "after",
+        object: 'search',
+        scope: 'all',
+        name: 'chains.request.build',
+        action: 'after',
         fire: function (data, scope) {
-            let localOverrides = klevu.getObjectPath(data, "localOverrides.query", false);
+            let localOverrides = klevu.getObjectPath(data, 'localOverrides.query', false);
             if (localOverrides) {
-                // loop through each type "localOverrides" as they are different for recs and search results
+                // loop through each type 'localOverrides' as they are different for recs and search results
                 klevu.each(localOverrides, function (queryKey, localOverride) {
                     if (!localOverride.filters) {
                         return;
@@ -166,18 +166,16 @@ $escaper = $escaperViewModel->getEscaper();
             }
         }
     });
-
-script;
+    ";
     ?>
     <?php
-    $scriptString = <<<script
+    $scriptString = "
     window._klvReady = window._klvReady || [];
     window._klvReady.push(function() {
         {$scriptString}
-    });
-
-script;
+    });";
     ?>
+
     <?= $secureRenderer->renderTag(
         'script',
         ['type' => 'text/javascript', 'id' => 'klevu_currency_conversion'],

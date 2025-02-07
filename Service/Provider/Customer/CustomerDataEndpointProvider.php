@@ -45,7 +45,10 @@ class CustomerDataEndpointProvider implements CustomerDataEndpointProviderInterf
             string: $storeBaseUrl,
             characters: ' /',
         );
+        $storeCode = $store
+            ? '/' . $store->getCode()
+            : '';
 
-        return $baseUrl . '/rest/' . self::CUSTOMER_DATA_ENDPOINT;
+        return $baseUrl . '/rest' . $storeCode . '/' . self::CUSTOMER_DATA_ENDPOINT;
     }
 }

@@ -9,14 +9,15 @@ declare(strict_types=1);
 namespace Klevu\Frontend\ViewModel;
 
 use Klevu\Configuration\Service\Provider\ScopeProviderInterface;
-use Klevu\Frontend\Constants;
 use Klevu\Frontend\Exception\InvalidIsEnabledDeterminerException;
 use Klevu\Frontend\Exception\OutputDisabledException;
 use Klevu\FrontendApi\Service\IsEnabledDeterminerInterface;
+use Klevu\FrontendApi\Service\Provider\Customer\SessionStoragePropertiesProviderInterface;
 use Klevu\FrontendApi\ViewModel\CustomerGroupSuffixInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -50,6 +51,10 @@ class CustomerGroupSuffix implements CustomerGroupSuffixInterface
      * @var mixed[]
      */
     private array $isEnabledConditions;
+    /**
+     * @var SessionStoragePropertiesProviderInterface|null
+     */
+    private readonly ?SessionStoragePropertiesProviderInterface $sessionStoragePropertiesProvider;
 
     /**
      * @param ScopeProviderInterface $scopeProvider
@@ -58,6 +63,7 @@ class CustomerGroupSuffix implements CustomerGroupSuffixInterface
      * @param AppState $appState
      * @param IsEnabledDeterminerInterface $isEnabledDeterminer
      * @param mixed[] $isEnabledConditions
+     * @param SessionStoragePropertiesProviderInterface|null $sessionStoragePropertiesProvider
      */
     public function __construct(
         ScopeProviderInterface $scopeProvider,
@@ -66,6 +72,7 @@ class CustomerGroupSuffix implements CustomerGroupSuffixInterface
         AppState $appState,
         IsEnabledDeterminerInterface $isEnabledDeterminer,
         array $isEnabledConditions = [],
+        ?SessionStoragePropertiesProviderInterface $sessionStoragePropertiesProvider = null,
     ) {
         $this->scopeProvider = $scopeProvider;
         $this->scopeConfig = $scopeConfig;
@@ -73,6 +80,8 @@ class CustomerGroupSuffix implements CustomerGroupSuffixInterface
         $this->appState = $appState;
         $this->isEnabledDeterminer = $isEnabledDeterminer;
         $this->isEnabledConditions = $isEnabledConditions;
+        $this->sessionStoragePropertiesProvider = $sessionStoragePropertiesProvider
+            ?: ObjectManager::getInstance()->get(SessionStoragePropertiesProviderInterface::class);
     }
 
     /**
@@ -116,7 +125,7 @@ class CustomerGroupSuffix implements CustomerGroupSuffixInterface
      */
     public function getSessionStorageKey(): string
     {
-        return Constants::KLEVU_SESSION_STORAGE_KEY;
+        return $this->sessionStoragePropertiesProvider->getStorageKey();
     }
 
     /**
@@ -124,7 +133,7 @@ class CustomerGroupSuffix implements CustomerGroupSuffixInterface
      */
     public function getCustomerDataKey(): string
     {
-        return Constants::KLEVU_SESSION_STORAGE_KEY_CUSTOMER_DATA;
+        return $this->sessionStoragePropertiesProvider->getCustomerDataSectionKey();
     }
 
     /***

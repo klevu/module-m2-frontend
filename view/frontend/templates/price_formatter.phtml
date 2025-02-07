@@ -23,22 +23,22 @@ $escaper = $escaperViewModel->getEscaper();
 ?>
 <?php if ($currencyConversionViewModel->isEnabled()): ?>
     <?php
-    $scriptString = <<<script
-        if (typeof klevu_uc_userOptions === "undefined") {
+    $scriptString = "
+        if (typeof klevu_uc_userOptions === 'undefined') {
             var klevu_uc_userOptions = {};
         }
         klevu_uc_userOptions.priceFormatter = {
-            "appendCurrencyAtLast": {$escaper->escapeJs($currencyConversionViewModel->getCurrencyAppendAtLast())},
-            "currencySymbol": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol())}",
-            "decimalPlaces": {$escaper->escapeJs($currencyConversionViewModel->getCurrencyPrecision())},
-            "decimalSeparator": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencyDecimalSymbol())}",
-            "thousandSeparator": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencyGroupSymbol())}",
-            "format": "{$escaper->escapeJs($currencyConversionViewModel->getCurrencyFormat())}",
-            "grouping": {$escaper->escapeJs($currencyConversionViewModel->getCurrencyGroupLength())},
+            'appendCurrencyAtLast': {$escaper->escapeJs($currencyConversionViewModel->getCurrencyAppendAtLast())},
+            'currencySymbol': '{$escaper->escapeJs($currencyConversionViewModel->getCurrencySymbol())}',
+            'decimalPlaces': {$escaper->escapeJs($currencyConversionViewModel->getCurrencyPrecision())},
+            'decimalSeparator': '{$escaper->escapeJs($currencyConversionViewModel->getCurrencyDecimalSymbol())}',
+            'thousandSeparator': '{$escaper->escapeJs($currencyConversionViewModel->getCurrencyGroupSymbol())}',
+            'format': '{$escaper->escapeJs($currencyConversionViewModel->getCurrencyFormat())}',
+            'grouping': {$escaper->escapeJs($currencyConversionViewModel->getCurrencyGroupLength())},
         };
-
-script;
+    ";
     ?>
+
     <?= $secureRenderer->renderTag(
         tagName: 'script',
         attributes: ['type' => 'text/javascript', 'id' => 'klevu_price_formatter'],

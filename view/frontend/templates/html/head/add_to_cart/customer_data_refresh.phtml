@@ -22,8 +22,8 @@ $addToCartViewModel = $block->getAddToCartViewModel();
 
 <?php if ($addToCartViewModel->isEnabled()): ?>
     <?php
-    $scriptString = <<<script
-    if (undefined !== typeof klevuAddToCart) {
+    $scriptString = "
+    if ('undefined' !== typeof klevuAddToCart) {
         document.addEventListener(klevuAddToCart.event.addToCartSuccess, (event) => {
             event.preventDefault();
 
@@ -34,15 +34,14 @@ $addToCartViewModel = $block->getAddToCartViewModel();
                 customerData.invalidate(sections);
                 customerData.reload(sections, true);
 
-                if ("undefined" !== typeof event.detail) {
+                if ('undefined' !== typeof event.detail) {
                     klevuAddToCart.dispatchEventAfterCustomerRefresh(event.detail);
                 }
             });
         });
-    }
-
-script;
+    }";
     ?>
+
     <?= $secureRenderer->renderTag(
         tagName: 'script',
         attributes: ['type' => 'text/javascript', 'id' => 'klevu_customer_data_refresh'],

@@ -20,7 +20,7 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
 <?php if ($visibilityFilterViewModel->isEnabled()): ?>
     <?php
     // phpcs:disable Generic.Files.LineLength.TooLong
-    $scriptString = <<<script
+    $scriptString = "
 
         let klevuVisibilityFilter = {
             queriesToFilter: [
@@ -29,8 +29,8 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
                 'productListFallback',
                 'klevuRECSItemList'
             ],
-            filterType: "ANY_OF",
-            recordQueryPath: "request.current.recordQueries",
+            filterType: 'ANY_OF',
+            recordQueryPath: 'request.current.recordQueries',
 
             /**
              * @param {{id: string, type: string}} request
@@ -38,11 +38,11 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
              */
             generateFilterCondition: function (request) {
                 return {
-                    key: "visibility",
-                    valueOperator: "INCLUDE",
+                    key: 'visibility',
+                    valueOperator: 'INCLUDE',
                     singleSelect: false,
                     values: [
-                        "catalog-search",
+                        'catalog-search',
                         klevuVisibilityFilter.getVisibilityForRequest(request)
                     ],
                 };
@@ -102,15 +102,15 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
              * @returns {string}
              */
             getConditionGroupPath: function (request) {
-                return "localOverrides.query." + request.id + ".settings.groupCondition";
+                return 'localOverrides.query.' + request.id + '.settings.groupCondition';
             }
         };
 
         klevu.event.webhook.attach({
-            object: "search",
-            scope: "all",
-            name: "chains.request.build",
-            action: "after",
+            object: 'search',
+            scope: 'all',
+            name: 'chains.request.build',
+            action: 'after',
             fire: function (data, scope) {
                 klevu.each(klevuVisibilityFilter.getRequestsToFilter(data), function (index, request) {
                     let localOverrideGroupCondition = klevuVisibilityFilter.getLocalOverrideGroupCondition(data, request);
@@ -132,19 +132,17 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
                 });
             }
         });
-
-script;
-    // phpcs:enable Generic.Files.LineLength.TooLong
+    "; // phpcs:enable Generic.Files.LineLength.TooLong
     ?>
     <?php
-    $scriptString = <<<script
+    $scriptString = "
     window._klvReady = window._klvReady || [];
     window._klvReady.push(function() {
         {$scriptString}
     });
-
-script;
+    ";
     ?>
+
     <?= $secureRenderer->renderTag(
         tagName: 'script',
         attributes: ['type' => 'text/javascript', 'id' => 'klevu_visibility_filter'],
