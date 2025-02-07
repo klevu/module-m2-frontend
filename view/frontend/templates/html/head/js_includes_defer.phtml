@@ -24,17 +24,17 @@ $escaper = $escaperViewModel->getEscaper();
 
 <?php foreach ($viewModel->getLinks() as $id => $link): ?>
     <?php
-    $scriptString = <<<script
-    if (typeof deferredScript === "undefined") {
+    $scriptString = "
+    if (typeof deferredScript === 'undefined') {
         let deferredScript = null;
     }
     deferredScript = document.createElement('script');
     deferredScript.type = 'text/javascript';
     deferredScript.id = '{$escaper->escapeHtmlAttr($id)}';
     deferredScript.src = '{$escaper->escapeUrl(string: $link)}';
-    document.head.append(deferredScript);
-script;
+    document.head.append(deferredScript);";
     ?>
+
     <?= /* @noEscape */ $secureRenderer->renderTag(
         tagName: 'script',
         attributes: [

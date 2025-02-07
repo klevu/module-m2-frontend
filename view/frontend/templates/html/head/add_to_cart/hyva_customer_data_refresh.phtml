@@ -22,18 +22,17 @@ $addToCartViewModel = $block->getAddToCartViewModel();
 
 <?php if ($addToCartViewModel->isEnabled()): ?>
     <?php
-    $scriptString = <<<script
+    $scriptString = "
     if (undefined !== typeof klevuAddToCart) {
         document.addEventListener(klevuAddToCart.event.addToCartSuccess, (event) => {
             event.preventDefault();
-            if ("undefined" !== typeof event.detail) {
+            if ('undefined' !== typeof event.detail) {
                 klevuAddToCart.dispatchEventAfterCustomerRefresh(event.detail);
             }
         });
-    }
-
-script;
+    }";
     ?>
+
     <?= $secureRenderer->renderTag(
         tagName: 'script',
         attributes: ['type' => 'text/javascript', 'id' => 'klevu_customer_data_refresh'],

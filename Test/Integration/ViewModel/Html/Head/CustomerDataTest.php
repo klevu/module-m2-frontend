@@ -76,9 +76,9 @@ class CustomerDataTest extends TestCase
     public function testIsOutputEnabled_ReturnsTrue_WhenIntegrated(): void
     {
         $this->createStore();
-        $store = $this->storeFixturesPool->get('test_store');
+        $storeFixture = $this->storeFixturesPool->get('test_store');
         $scopeProvider = $this->objectManager->get(ScopeProviderInterface::class);
-        $scopeProvider->setCurrentScope($store->get());
+        $scopeProvider->setCurrentScope($storeFixture->get());
 
         $this->setAuthKeys(
             scopeProvider: $scopeProvider,
@@ -107,9 +107,14 @@ class CustomerDataTest extends TestCase
 
     public function testGetCookieKey_ReturnsExpectedString(): void
     {
+        $this->createStore();
+        $storeFixture = $this->storeFixturesPool->get('test_store');
+        $scopeProvider = $this->objectManager->get(ScopeProviderInterface::class);
+        $scopeProvider->setCurrentScope($storeFixture->get());
+
         $viewModel = $this->instantiateTestObject();
         $this->assertSame(
-            expected: 'klv_mage',
+            expected: 'klv_mage_' . $storeFixture->getCode(),
             actual: $viewModel->getCookieKey(),
         );
     }
@@ -164,7 +169,24 @@ class CustomerDataTest extends TestCase
         $viewModel = $this->instantiateTestObject();
         $endpoint = $viewModel->getCustomerDataApiEndpoint();
         $this->assertSame(
-            expected: 'https://magento.test/rest/V1/klevu/customerData',
+            expected: 'https://magento.test/rest/' . $store->getCode() . '/V1/klevu/customerData',
+            actual: $endpoint,
+        );
+    }
+
+    /**
+     * @magentoConfigFixture default_store web/unsecure/base_url https://not_secure.test/
+     * @magentoConfigFixture default_store web/secure/base_url https://magento.test/
+     */
+    public function testGetCustomerDataApiEndpoint_ReturnsExpectedString_StoreScopeNotSet(): void
+    {
+        $scopeProvider = $this->objectManager->get(ScopeProviderInterface::class);
+        $scopeProvider->unsetCurrentScope();
+
+        $viewModel = $this->instantiateTestObject();
+        $endpoint = $viewModel->getCustomerDataApiEndpoint();
+        $this->assertSame(
+            expected: 'https://magento.test/rest/default/V1/klevu/customerData',
             actual: $endpoint,
         );
     }

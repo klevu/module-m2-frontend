@@ -26,9 +26,9 @@ $escaper = $escaperViewModel->getEscaper();
 
 <?php if ($addToCartViewModel->isEnabled()): ?>
     <?php
-    $functionsScriptString = <<<script
+    $functionsScriptString = "
     var klevuAddToCart = klevuAddToCart || {};
-    klevuAddToCart.event = klevuAddToCart.event || {}
+    klevuAddToCart.event = klevuAddToCart.event || {};
     klevuAddToCart.event.addToCartSuccess = 'klevuAddToCartSuccess';
     klevuAddToCart.event.refreshCustomerData = 'klevuAddToCartRefreshCustomerData';
 
@@ -37,26 +37,26 @@ $escaper = $escaperViewModel->getEscaper();
      * @returns {Promise<void>}
      */
     klevuAddToCart.submitData = async function(formData) {
-        fetch("{$escaper->escapeUrl($addToCartViewModel->getAddToCartUrl())}", {
-            method: "POST",
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
+        fetch('{$escaper->escapeUrl($addToCartViewModel->getAddToCartUrl())}', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
             headers: {
-                "Accept": "*/*",
-                "Content-Type": "application/x-www-form-urlencoded",
+                'Accept': '*/*',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: klevuAddToCart.generateParams(formData),
         }).then((response) => {
             if (response.ok) {
                 klevuAddToCart.dispatchEventOnSuccess(response);
             } else {
-                console.error("Add To Cart:", response.status + ' ' + response.statusText);
+                console.error('Add To Cart:', response.status + ' ' + response.statusText);
             }
         }).catch((error) => {
-            console.error("Error:", error);
+            console.error('Error:', error);
         });
-    }
+    };
 
     /**
      * @param {Object} formData
@@ -67,10 +67,10 @@ $escaper = $escaperViewModel->getEscaper();
         for (const [key, value] of Object.entries(formData)) {
             params.append(key, value);
         }
-        params.append('form_key', "{$escaper->escapeHtmlAttr($addToCartViewModel->getFormKey())}");
+        params.append('form_key', '{$escaper->escapeHtmlAttr($addToCartViewModel->getFormKey())}');
 
         return params;
-    }
+    };
 
     /**
      * @param {Response} response
@@ -85,7 +85,7 @@ $escaper = $escaperViewModel->getEscaper();
             cancelable: false,
         });
         document.dispatchEvent(event);
-    }
+    };
 
     /**
      * @param {Object} detail
@@ -97,19 +97,17 @@ $escaper = $escaperViewModel->getEscaper();
             cancelable: false,
         });
         document.dispatchEvent(event);
-    }
+    };
 
     document.addEventListener(klevuAddToCart.event.refreshCustomerData, (event) => {
         event.preventDefault();
-        if ("undefined" !== typeof event.detail.redirected
+        if ('undefined' !== typeof event.detail.redirected
             && event.detail.redirected
-            && "undefined" !== typeof event.detail.url
+            && 'undefined' !== typeof event.detail.url
         ) {
             document.location = event.detail.url;
         }
-    });
-
-script;
+    });";
     ?>
     <?= $secureRenderer->renderTag(
         tagName: 'script',
@@ -125,8 +123,8 @@ script;
     <?= $block->getChildHtml('klevu_frontend.addtocart_before') ?>
 
     <?php
-    $scriptString = <<<script
-    if ("undefined" === typeof klevu_addtocart) {
+    $scriptString = "
+    if ('undefined' === typeof klevu_addtocart) {
         /**
          * @param id
          * @param url
@@ -139,10 +137,9 @@ script;
             };
             klevuAddToCart.submitData(formData)
         }
-    }
-
-script;
+    }";
     ?>
+
     <?= $secureRenderer->renderTag(
         tagName: 'script',
         attributes: ['type' => 'text/javascript', 'id' => 'klevu_add_to_cart'],

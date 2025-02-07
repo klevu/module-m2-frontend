@@ -23,13 +23,13 @@ $escaper = $escaperViewModel->getEscaper();
 ?>
 <?php if ($customerGroupSuffixViewModel->isEnabled()): ?>
 <?php
-    $scriptString = <<<script
+    $scriptString = "
 
         const klevu_addPriceSuffixToQueryControl = {
             name: 'addPriceSuffixToQuery',
             fire: function (data, scope) {
                 const customerGroupSuffix = klevuCustomerGroupSuffix.getCustomerGroupSuffix();
-                if ("undefined" !== typeof customerGroupSuffix) {
+                if ('undefined' !== typeof customerGroupSuffix) {
                     klevu.search.modules.addPriceSuffixToQuery(data, scope, customerGroupSuffix);
                 }
             }
@@ -46,14 +46,14 @@ $escaper = $escaperViewModel->getEscaper();
                      * @param {string} customerGroupSuffix
                      */
                     addPriceSuffixToQuery: function (data, scope, customerGroupSuffix) {
-                        if (typeof data.request.current === "undefined") {
+                        if (typeof data.request.current === 'undefined') {
                             return;
                         }
-                        const recordQueries = klevu.getObjectPath(data, "request.current.recordQueries", []);
+                        const recordQueries = klevu.getObjectPath(data, 'request.current.recordQueries', []);
                         klevu.each(recordQueries, function (key, query) {
                             klevu.setObjectPath(
                                 data,
-                                "localOverrides.query." + query.id + ".settings.priceFieldSuffix",
+                                'localOverrides.query.' + query.id + '.settings.priceFieldSuffix',
                                 customerGroupSuffix
                             );
                         });
@@ -69,7 +69,7 @@ $escaper = $escaperViewModel->getEscaper();
              */
             getCustomerGroupSuffix: function () {
                 const baseCurrencyCode = '{$customerGroupSuffixViewModel->getBaseCurrencyCode()}';
-                if ("undefined" === typeof baseCurrencyCode) {
+                if ('undefined' === typeof baseCurrencyCode) {
                     return;
                 }
                 const customerGroupId = klevuCustomerGroupSuffix.getCustomerGroupId();
@@ -87,7 +87,7 @@ $escaper = $escaperViewModel->getEscaper();
             getCustomerGroupId: function () {
                 const customerData = klevuCustomerGroupSuffix.getCustomerDataFromSessionStorage();
 
-                return ("undefined" !== typeof customerData.customer_group_id)
+                return ('undefined' !== typeof customerData.customer_group_id)
                     ? customerData.customer_group_id
                     : null;
             },
@@ -102,8 +102,7 @@ $escaper = $escaperViewModel->getEscaper();
                 return sessionStorage.{$customerGroupSuffixViewModel->getCustomerDataKey()} || {};
             },
         };
-
-script;
+    ";
     ?>
 
     <?= $secureRenderer->renderTag(

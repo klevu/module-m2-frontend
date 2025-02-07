@@ -73,7 +73,7 @@ class CustomerDataEndpointProviderTest extends TestCase
 
         $provider = $this->instantiateTestObject();
         $this->assertSame(
-            expected: 'https://magento.test/rest/V1/klevu/customerData',
+            expected: 'https://magento.test/rest/' . $store->getCode() . '/V1/klevu/customerData',
             actual: $provider->get(),
         );
     }

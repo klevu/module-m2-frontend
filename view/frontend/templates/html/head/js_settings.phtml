@@ -35,15 +35,13 @@ $klevuSettings = $viewModel->getKlevuJsSettings();
         <?= $block->getChildHtml('klevu_frontend.init_before') ?>
 
         <?php
-        $scriptString = <<<script
+        $scriptString = "
         if (typeof klevuSettings !== 'undefined') {
             window._klvReady = window._klvReady || [];
             window._klvReady.push(function() {
               klevu(klevuSettings);
             });
-        }
-
-script;
+        }";
         ?>
         <?= /* @noEscape */ $secureRenderer->renderTag(
             tagName: 'script',

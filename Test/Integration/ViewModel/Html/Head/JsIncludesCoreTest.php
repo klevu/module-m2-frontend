@@ -139,7 +139,6 @@ class JsIncludesCoreTest extends TestCase
 
         $this->assertCount(expectedCount: 1, haystack: $links);
         $firstLink = $links[array_key_first($links)] ?? '';
-        $this->assertStringContainsString(needle: 'https://', haystack: $firstLink);
-        $this->assertStringContainsString(needle: 'core/v2/klevu.js', haystack: $firstLink);
+        $this->assertStringMatchesFormat(format: 'https://js%A.klevu.com/core/v2/klevu%A.js', string: $firstLink);
     }
 }

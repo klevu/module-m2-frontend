@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Klevu\Frontend\Test\Integration\ViewModel;
 
 use Klevu\Configuration\Service\Provider\ScopeProviderInterface;
-use Klevu\Frontend\Constants;
 use Klevu\Frontend\Exception\InvalidIsEnabledDeterminerException;
+use Klevu\Frontend\Service\Provider\Customer\SessionStoragePropertiesProvider;
 use Klevu\Frontend\Service\Provider\CustomerGroupPricingEnabledProvider;
 use Klevu\Frontend\ViewModel\CustomerGroupSuffix;
 use Klevu\FrontendApi\Service\IsEnabledCondition\IsEnabledConditionInterface;
@@ -334,9 +334,14 @@ class CustomerGroupSuffixViewModelTest extends TestCase
 
     public function testGetSessionStorageKey_ReturnsExpectedValue(): void
     {
+        $this->createStore();
+        $storeFixture = $this->storeFixturesPool->get('test_store');
+        $scopeProvider = $this->objectManager->get(ScopeProviderInterface::class);
+        $scopeProvider->setCurrentScope($storeFixture->get());
+
         $viewModel = $this->instantiateTestObject();
         $this->assertSame(
-            expected: Constants::KLEVU_SESSION_STORAGE_KEY,
+            expected: SessionStoragePropertiesProvider::SESSION_STORAGE_KEY . '_' . $storeFixture->getCode(),
             actual: $viewModel->getSessionStorageKey(),
         );
     }
@@ -345,7 +350,7 @@ class CustomerGroupSuffixViewModelTest extends TestCase
     {
         $viewModel = $this->instantiateTestObject();
         $this->assertSame(
-            expected: Constants::KLEVU_SESSION_STORAGE_KEY_CUSTOMER_DATA,
+            expected: SessionStoragePropertiesProvider::SESSION_STORAGE_CUSTOMER_DATA_SECTION,
             actual: $viewModel->getCustomerDataKey(),
         );
     }
