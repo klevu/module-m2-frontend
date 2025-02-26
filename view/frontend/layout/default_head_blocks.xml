@@ -51,22 +51,6 @@
                     </arguments>
                 </block>
 
-                <container name="Klevu_Frontend.session_data" after="Klevu_Frontend.js_includes">
-                    <block name="Klevu_Frontend.init_session_data"
-                           template="Klevu_Frontend::html/head/customer_data.phtml">
-                        <arguments>
-                            <argument name="cookie_view_model"
-                                      xsi:type="object">Klevu\Frontend\ViewModel\Cookie</argument>
-                            <argument name="customer_data_view_model"
-                                      xsi:type="object">Klevu\Frontend\ViewModel\Html\Head\CustomerData</argument>
-                            <argument name="session_storage_view_model"
-                                      xsi:type="object">Klevu\Frontend\ViewModel\SessionStorage</argument>
-                            <argument name="escaper_view_model"
-                                      xsi:type="object">Klevu\Frontend\ViewModel\Escaper</argument>
-                        </arguments>
-                    </block>
-                </container>
-
                 <block name="Klevu_Frontend.price_formatter"
                        template="Klevu_Frontend::price_formatter.phtml"
                         after="Klevu_Frontend.js_includes.core"
