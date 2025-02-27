@@ -63,10 +63,6 @@ $escaper = $escaperViewModel->getEscaper();
             klevu.each(productRecords, function (index, product) {
                 // recommendations requires this symbol replacement
                 product.currency = klevuCurrency.symbol;
-                // check if conversion has already been processed
-                if (parseFloat(product.basePrice) !== parseFloat(product.salePrice)) {
-                    return;
-                }
                 if (klevu.isNumeric(product.price)) {
                     product.price = klevuCurrency.toLocal(product.price);
                 }
