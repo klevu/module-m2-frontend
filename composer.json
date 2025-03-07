@@ -8,7 +8,7 @@
         "klevu/module-m2-customer": "^1.0.0",
         "klevu/module-m2-frontend-api": "~2.0.0",
         "klevu/module-m2-frontend-categorynavigation": "~2.0.0",
-        "klevu/module-m2-frontend-metadata": "~2.0.0",
+        "klevu/module-m2-frontend-metadata": "~2.1.0",
         "klevu/module-m2-frontend-recommendations": "~2.0.0",
         "klevu/module-m2-frontend-search": "~2.0.0",
         "magento/module-config": "^101.2.4",
@@ -16,7 +16,7 @@
         "magento/module-store": "^101.1.4"
     },
     "type": "magento2-module",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "license": [
         "MIT"
     ],
