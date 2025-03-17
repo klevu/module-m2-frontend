@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @var Template $block
+ * @var SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php
+    // phpcs:disable Generic.Files.LineLength.TooLong
+    $scriptString = "
+        klevu.event.webhook.attach({
+            object: 'search',
+            scope: 'landing',
+            name: 'chains.template.events',
+            action: 'after',
+            fire: function (data, scope) {
+                if (typeof klevu.search.modules.kmcInputs.base === 'undefined') {
+                    console.warning('Klevu KMC Inputs undefined');
+                    return;
+                }
+
+                let showSearchBoxOnLandingPage = klevu.search.modules.kmcInputs.base.getShowSearchOnLandingPageEnableValue();
+                let extraSearchBox = klevu.search.extraSearchBox[klevu.search.resultsQuick];
+
+                if (!showSearchBoxOnLandingPage || typeof extraSearchBox === 'undefined') {
+                    return;
+                }
+                
+                extraSearchBox.setElement(extraSearchBox.getScope().element);
+            }
+        });
+    "; // phpcs:enable Generic.Files.LineLength.TooLong
+?>
+<?php
+    $scriptString = "
+    window._klvReady = window._klvReady || [];
+    window._klvReady.push(function() {
+        {$scriptString}
+    });
+    ";
+?>
+
+<?= $secureRenderer->renderTag(
+    tagName: 'script',
+    attributes: ['type' => 'text/javascript', 'id' => 'klevu_init_extra_search_box'],
+    content: $scriptString,
+    textContent: false
+) ?>

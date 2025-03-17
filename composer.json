@@ -16,7 +16,7 @@
         "magento/module-store": "^101.1.4"
     },
     "type": "magento2-module",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "license": [
         "MIT"
     ],
