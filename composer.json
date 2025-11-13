@@ -6,17 +6,17 @@
         "psr/log": "*",
         "klevu/module-m2-configuration": "^1.1.0",
         "klevu/module-m2-customer": "^1.1.0",
-        "klevu/module-m2-frontend-api": "~2.1.0",
-        "klevu/module-m2-frontend-categorynavigation": "~2.1.0",
-        "klevu/module-m2-frontend-metadata": "~2.2.0",
-        "klevu/module-m2-frontend-recommendations": "~2.1.0",
-        "klevu/module-m2-frontend-search": "~2.1.1",
+        "klevu/module-m2-frontend-api": "~2.1.1",
+        "klevu/module-m2-frontend-categorynavigation": "~2.1.1",
+        "klevu/module-m2-frontend-metadata": "~2.2.1",
+        "klevu/module-m2-frontend-recommendations": "~2.1.1",
+        "klevu/module-m2-frontend-search": "~2.1.2",
         "magento/module-config": "^101.2.4",
         "magento/framework": "^103.0.4",
         "magento/module-store": "^101.1.4"
     },
     "type": "magento2-module",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "license": [
         "MIT"
     ],
