@@ -67,7 +67,10 @@ $escaper = $escaperViewModel->getEscaper();
         for (const [key, value] of Object.entries(formData)) {
             params.append(key, value);
         }
-        params.append('form_key', '{$escaper->escapeHtmlAttr($addToCartViewModel->getFormKey())}');
+        let formKeyInput = document.querySelector('input[name=\"form_key\"]');
+        if (formKeyInput) {
+            params.append('form_key', formKeyInput.value);
+        }
 
         return params;
     };

@@ -11,11 +11,11 @@ namespace Klevu\Frontend\ViewModel;
 use Klevu\Frontend\Exception\InvalidIsEnabledDeterminerException;
 use Klevu\Frontend\Exception\OutputDisabledException;
 use Klevu\FrontendApi\Service\IsEnabledDeterminerInterface;
+use Klevu\FrontendApi\ViewModel\VisibilityFilterInterface;
 use Magento\Framework\App\State as AppState;
-use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Psr\Log\LoggerInterface;
 
-class VisibilityFilter implements ArgumentInterface
+class VisibilityFilter implements VisibilityFilterInterface
 {
     /**
      * @var LoggerInterface

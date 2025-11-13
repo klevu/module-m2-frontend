@@ -72,6 +72,7 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
                         return;
                     }
                     requestData.push({
+                        index: index,
                         id: query.id,
                         type: query.typeOfRequest
                     });
@@ -102,7 +103,7 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
              * @returns {string}
              */
             getConditionGroupPath: function (request) {
-                return 'localOverrides.query.' + request.id + '.settings.groupCondition';
+                return 'request.current.recordQueries['+request.index+'].settings.groupCondition';
             }
         };
 
@@ -112,23 +113,57 @@ $visibilityFilterViewModel = $block->getVisibilityFilterViewModel();
             name: 'chains.request.build',
             action: 'after',
             fire: function (data, scope) {
-                klevu.each(klevuVisibilityFilter.getRequestsToFilter(data), function (index, request) {
-                    let localOverrideGroupCondition = klevuVisibilityFilter.getLocalOverrideGroupCondition(data, request);
-                    klevu.each(localOverrideGroupCondition.conditions, function (index, condition) {
-                        if (condition && condition.key === 'visibility') {
-                            // remove visibility from conditions if already set
+                let requestsToFilter = klevuVisibilityFilter.getRequestsToFilter(data); 
+                klevu.each(requestsToFilter, function (index, request) {
+                    if ('RECS_' === request.type.substring(0, 5)) {
+                        let recordQueries = klevu.getObjectPath(data, 'request.current.recordQueries', {});
+                        
+                        klevu.each(recordQueries, function (queryIndex, existingRecordQuery) {
+                            let groupConditionConditions = klevu.getObjectPath(existingRecordQuery, 'settings.groupCondition.conditions', []);
+                            klevu.each(groupConditionConditions, function (conditionIndex, groupConditionCondition) {
+                                if (groupConditionCondition.key !== 'visibility') {
+                                    return;                            
+                                }
+                                
+                                // Remove visibility if already set
+                                groupConditionConditions.conditions.splice(conditionIndex, 1);
+                            });
+                            groupConditionConditions.push(
+                                klevuVisibilityFilter.generateFilterCondition(request)
+                            );
+                            
+                            klevu.setObjectPath(
+                                existingRecordQuery,
+                                'settings.groupCondition.conditions',
+                                groupConditionConditions
+                            );
+                        });
+    
+                        klevu.setObjectPath(
+                            data,
+                            'request.current.recordQueries',
+                            recordQueries
+                        );
+                    } else {
+                        let localOverrideGroupCondition = klevuVisibilityFilter.getLocalOverrideGroupCondition(data, request);
+                        klevu.each(localOverrideGroupCondition.conditions, function(index, condition) {
+                            if (condition.key !== 'visibility') {
+                                return;                            
+                            }
+                            
+                            // Remove visibility if already set
                             localOverrideGroupCondition.conditions.splice(index, 1);
-                        }
-                    });
-                    localOverrideGroupCondition.conditions.push(
-                        klevuVisibilityFilter.generateFilterCondition(request)
-                    );
-
-                    klevu.setObjectPath(
-                        data,
-                        klevuVisibilityFilter.getConditionGroupPath(request),
-                        localOverrideGroupCondition
-                    );
+                        });
+                        localOverrideGroupCondition.conditions.push(
+                            klevuVisibilityFilter.generateFilterCondition(request)
+                        );
+            
+                        klevu.setObjectPath(
+                            data,
+                            klevuVisibilityFilter.getConditionGroupPath(request),
+                            localOverrideGroupCondition
+                        );
+                    }
                 });
             }
         });
