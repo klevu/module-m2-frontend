@@ -47,10 +47,21 @@ class RatesProvider implements RatesProviderInterface
             return [];
         }
 
-        return $this->currencyResourceModel->getCurrencyRates(
-            currency: $this->getBaseCurrencyCode($store),
-            toCurrencies: $this->getAvailableCurrencyCodes($store),
+        $baseCurrencyCode = $this->getBaseCurrencyCode($store);
+        $availableCurrencyCodes = $this->getAvailableCurrencyCodes($store);
+        $rates = $this->currencyResourceModel->getCurrencyRates(
+            currency: $baseCurrencyCode,
+            toCurrencies: $availableCurrencyCodes,
         );
+        if (
+            $baseCurrencyCode
+            && !isset($rates[$baseCurrencyCode])
+            && in_array($baseCurrencyCode, $availableCurrencyCodes, true)
+        ) {
+            $rates[$baseCurrencyCode] = '1';
+        }
+
+        return $rates;
     }
 
     /**
